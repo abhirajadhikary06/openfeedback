@@ -46,6 +46,7 @@ def test_companies_list_not_empty():
     assert COMPANIES[0]['name'] == 'Google'
 
 
+@patch.dict('app.os.environ', {'LOGO_DEV_TOKEN': 'test-token'})
 @patch('app.requests.head')
 def test_get_company_logo_success(mock_head, client):
     mock_response = MagicMock()
@@ -56,6 +57,7 @@ def test_get_company_logo_success(mock_head, client):
     assert 'logo.dev' in logo
 
 
+@patch.dict('app.os.environ', {'LOGO_DEV_TOKEN': 'test-token'})
 @patch('app.requests.head')
 def test_get_company_logo_failure(mock_head, client):
     mock_head.side_effect = Exception('Connection error')
