@@ -16,7 +16,7 @@ test:
     - pip install -r requirements.txt
     - pip install pytest flake8
     - flake8 .
-    - pytest
+    - pytest tests/ -v
   variables:
     LOGO_DEV_TOKEN: $LOGO_DEV_TOKEN
   rules:
