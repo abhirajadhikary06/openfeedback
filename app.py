@@ -30,6 +30,7 @@ COMPANIES = [
     {"name": "Uber", "domain": "uber.com"}
 ]
 
+
 class Feedback(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     company_name = db.Column(db.String(100), nullable=False)
@@ -38,29 +39,33 @@ class Feedback(db.Model):
     sentiment = db.Column(db.String(20), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
+
 def get_company_logo(domain):
     """Get company logo using Logo.dev API"""
     if not LOGO_DEV_TOKEN:
         return f"https://via.placeholder.com/50x50/4285f4/ffffff?text={domain[0].upper()}"
-    
+
     try:
         logo_url = f"https://img.logo.dev/{domain}?token={LOGO_DEV_TOKEN}"
         response = requests.head(logo_url, timeout=5)
         if response.status_code == 200:
             return logo_url
-    except:
+    except Exception:
         pass
     return f"https://via.placeholder.com/50x50/4285f4/ffffff?text={domain[0].upper()}"
 
+
 def analyze_sentiment(text):
     """Simple sentiment analysis"""
-    positive_words = ['great', 'excellent', 'amazing', 'love', 'perfect', 'awesome', 'good', 'fantastic']
-    negative_words = ['bad', 'terrible', 'awful', 'hate', 'worst', 'poor', 'disappointing']
-    
+    positive_words = ['great', 'excellent', 'amazing', 'love', 'perfect', 'awesome',
+                      'good', 'fantastic']
+    negative_words = ['bad', 'terrible', 'awful', 'hate', 'worst', 'poor',
+                      'disappointing']
+
     text_lower = text.lower()
     pos_score = sum(1 for word in positive_words if word in text_lower)
     neg_score = sum(1 for word in negative_words if word in text_lower)
-    
+
     if pos_score > neg_score:
         return "positive"
     elif neg_score > pos_score:
@@ -68,24 +73,26 @@ def analyze_sentiment(text):
     else:
         return "neutral"
 
+
 @app.route('/')
 def index():
     feedbacks = Feedback.query.order_by(Feedback.date_created.desc()).all()
     return render_template('index.html', feedbacks=feedbacks, companies=COMPANIES)
+
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
     data = request.json
     company_name = data['company']
     comment = data['comment']
-    
+
     # Get company logo
     company = next((c for c in COMPANIES if c['name'] == company_name), None)
     logo = get_company_logo(company['domain']) if company else ""
-    
+
     # Analyze sentiment
     sentiment = analyze_sentiment(comment)
-    
+
     # Save feedback
     feedback = Feedback(
         company_name=company_name,
@@ -95,7 +102,7 @@ def submit_feedback():
     )
     db.session.add(feedback)
     db.session.commit()
-    
+
     return jsonify({
         'success': True,
         'feedback': {
@@ -106,6 +113,7 @@ def submit_feedback():
             'sentiment': sentiment
         }
     })
+
 
 if __name__ == '__main__':
     with app.app_context():
