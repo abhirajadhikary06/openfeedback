@@ -11,7 +11,7 @@ db = SQLAlchemy(app)
 
 # Companies list with local logo paths
 COMPANIES = [
-    {"name": "Google", "domain": "google.com", "logo": "/static/logos/google.png"},
+    {"name": "Google", "domain": "google.com", "logo": "static/logos/google.png"},
     {"name": "Apple", "domain": "apple.com", "logo": "static/logos/apple.png"},
     {"name": "Microsoft", "domain": "microsoft.com", "logo": "static/logos/microsoft.png"},
     {"name": "Amazon", "domain": "amazon.com", "logo": "static/logos/amazon.png"},
