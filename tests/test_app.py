@@ -1,11 +1,12 @@
 import os
 import sys
-import pytest
-from unittest.mock import patch, MagicMock
 
 # Add the parent directory to sys.path to allow importing app module
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, parent_dir)
+
+import pytest
+from unittest.mock import patch, MagicMock
 from app import app, db, COMPANIES
 
 
