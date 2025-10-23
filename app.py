@@ -27,7 +27,27 @@ COMPANIES = [
     {"name": "Facebook", "domain": "facebook.com"},
     {"name": "Twitter", "domain": "twitter.com"},
     {"name": "Spotify", "domain": "spotify.com"},
-    {"name": "Uber", "domain": "uber.com"}
+    {"name": "Lyft", "domain": "lyft.com"},
+    {"name": "Dropbox", "domain": "dropbox.com"},
+    {"name": "Slack", "domain": "slack.com"},
+    {"name": "HubSpot", "domain": "hubspot.com"},
+    {"name": "Salesforce", "domain": "salesforce.com"},
+    {"name": "Shopify", "domain": "shopify.com"},
+    {"name": "Zoom", "domain": "zoom.us"},
+    {"name": "Asana", "domain": "asana.com"},
+    {"name": "Monday.com", "domain": "monday.com"},
+    {"name": "Atlassian", "domain": "atlassian.com"},
+    {"name": "Pinterest", "domain": "pinterest.com"},
+    {"name": "TikTok", "domain": "tiktok.com"},
+    {"name": "Snapchat", "domain": "snapchat.com"},
+    {"name": "Uber", "domain": "uber.com"},
+    {"name": "Adobe", "domain": "adobe.com"},
+    {"name": "Intel", "domain": "intel.com"},
+    {"name": "IBM", "domain": "ibm.com"},
+    {"name": "Oracle", "domain": "oracle.com"},
+    {"name": "Samsung", "domain": "samsung.com"},
+    {"name": "Sony", "domain": "sony.com"},
+    {"name": "Nintendo", "domain": "nintendo.com"}
 ]
 
 
