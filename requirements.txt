@@ -2,3 +2,4 @@ Flask
 Flask-SQLAlchemy
 requests
 python-dotenv
+pytest
