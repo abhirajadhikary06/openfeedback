@@ -25,7 +25,7 @@ def client():
 def test_index_returns_html(client):
     response = client.get('/')
     assert response.status_code == 200
-    assert b'<div class="hof-container">' in response.data
+    assert b'<div class="feedback-grid"' in response.data
 
 
 def test_submit_feedback_valid_data(client):
