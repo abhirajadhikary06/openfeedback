@@ -40,7 +40,7 @@ deploy-preview:
   stage: deploy-preview
   image: alpine
   script:
-    - echo "Preview environment: $CI_COMMIT_REF_SLUG"
+    - echo "Preview environment:$CI_COMMIT_REF_SLUG"
   environment:
     name: preview/$CI_COMMIT_REF_SLUG
   rules:
