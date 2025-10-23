@@ -88,7 +88,7 @@ def analyze_sentiment(text):
 def index():
     feedbacks = Feedback.query.order_by(Feedback.date_created.desc()).all()
     return render_template('index.html', feedbacks=feedbacks,
-                          companies=COMPANIES)
+                           companies=COMPANIES)
 
 
 @app.route('/submit_feedback', methods=['POST'])
