@@ -43,7 +43,10 @@ class Feedback(db.Model):
 def get_company_logo(domain):
     """Get company logo using Logo.dev API"""
     if not LOGO_DEV_TOKEN:
-        return f"https://via.placeholder.com/50x50/4285f4/ffffff?text={domain[0].upper()}"
+        return (
+            f"https://via.placeholder.com/50x50/4285f4/ffffff?"
+            f"text={domain[0].upper()}"
+        )
 
     try:
         logo_url = f"https://img.logo.dev/{domain}?token={LOGO_DEV_TOKEN}"
@@ -52,15 +55,22 @@ def get_company_logo(domain):
             return logo_url
     except Exception:
         pass
-    return f"https://via.placeholder.com/50x50/4285f4/ffffff?text={domain[0].upper()}"
+    return (
+        f"https://via.placeholder.com/50x50/4285f4/ffffff?"
+        f"text={domain[0].upper()}"
+    )
 
 
 def analyze_sentiment(text):
     """Simple sentiment analysis"""
-    positive_words = ['great', 'excellent', 'amazing', 'love', 'perfect', 'awesome',
-                      'good', 'fantastic']
-    negative_words = ['bad', 'terrible', 'awful', 'hate', 'worst', 'poor',
-                      'disappointing']
+    positive_words = [
+        'great', 'excellent', 'amazing', 'love', 'perfect', 'awesome',
+        'good', 'fantastic'
+    ]
+    negative_words = [
+        'bad', 'terrible', 'awful', 'hate', 'worst', 'poor',
+        'disappointing'
+    ]
 
     text_lower = text.lower()
     pos_score = sum(1 for word in positive_words if word in text_lower)
@@ -77,7 +87,8 @@ def analyze_sentiment(text):
 @app.route('/')
 def index():
     feedbacks = Feedback.query.order_by(Feedback.date_created.desc()).all()
-    return render_template('index.html', feedbacks=feedbacks, companies=COMPANIES)
+    return render_template('index.html', feedbacks=feedbacks,
+                          companies=COMPANIES)
 
 
 @app.route('/submit_feedback', methods=['POST'])
