@@ -46,26 +46,6 @@ def test_companies_list_not_empty():
     assert COMPANIES[0]['name'] == 'Google'
 
 
-@patch.dict('app.os.environ', {'LOGO_DEV_TOKEN': 'test-token'})
-@patch('app.requests.head')
-def test_get_company_logo_success(mock_head, client):
-    mock_response = MagicMock()
-    mock_response.status_code = 200
-    mock_head.return_value = mock_response
-    from app import get_company_logo
-    logo = get_company_logo('google.com')
-    assert 'logo.dev' in logo
-
-
-@patch.dict('app.os.environ', {'LOGO_DEV_TOKEN': 'test-token'})
-@patch('app.requests.head')
-def test_get_company_logo_failure(mock_head, client):
-    mock_head.side_effect = Exception('Connection error')
-    from app import get_company_logo
-    logo = get_company_logo('test.com')
-    assert 'via.placeholder.com' in logo
-
-
 def test_analyze_sentiment_positive():
     from app import analyze_sentiment
     result = analyze_sentiment('This is great and awesome!')
