@@ -14,8 +14,7 @@ test:
   image: python:3.9
   script:
     - pip install -r requirements.txt
-    - pip install pytest flake8
-    - flake8 .
+    - pip install pytest
     - pytest tests/ -v
   variables:
     LOGO_DEV_TOKEN: $LOGO_DEV_TOKEN

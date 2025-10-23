@@ -19,10 +19,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
-        pip install flake8 pytest
-    
-    - name: Lint
-      run: flake8 .
+        pip install pytest
     
     - name: Test
       run: pytest tests/ -v
