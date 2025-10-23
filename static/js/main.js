@@ -1,78 +1,102 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const feedbackBtn = document.getElementById('feedbackBtn');
-    const feedbackOverlay = document.getElementById('feedbackOverlay');
-    const closeFeedback = document.getElementById('closeFeedback');
-    const feedbackForm = document.getElementById('feedbackForm');
-    const hofGrid = document.getElementById('hofGrid');
+// Feedback Modal Management
+const feedbackBtn = document.getElementById("feedbackBtn")
+const closeFeedback = document.getElementById("closeFeedback")
+const feedbackOverlay = document.getElementById("feedbackOverlay")
+const feedbackForm = document.getElementById("feedbackForm")
 
-    // Toggle feedback overlay
-    feedbackBtn.addEventListener('click', () => {
-        feedbackOverlay.style.display = 'flex';
-    });
+// Open modal
+feedbackBtn.addEventListener("click", () => {
+  feedbackOverlay.classList.add("active")
+  document.body.style.overflow = "hidden"
+})
 
-    closeFeedback.addEventListener('click', () => {
-        feedbackOverlay.style.display = 'none';
-    });
+// Close modal
+closeFeedback.addEventListener("click", () => {
+  feedbackOverlay.classList.remove("active")
+  document.body.style.overflow = "auto"
+})
 
-    feedbackOverlay.addEventListener('click', (e) => {
-        if (e.target === feedbackOverlay) {
-            feedbackOverlay.style.display = 'none';
-        }
-    });
+// Close modal when clicking outside
+feedbackOverlay.addEventListener("click", (e) => {
+  if (e.target === feedbackOverlay) {
+    feedbackOverlay.classList.remove("active")
+    document.body.style.overflow = "auto"
+  }
+})
 
-    // Submit feedback
-    feedbackForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const formData = new FormData(feedbackForm);
-        const data = {
-            company: formData.get('company'),
-            comment: formData.get('comment')
-        };
+// Handle form submission
+feedbackForm.addEventListener("submit", async (e) => {
+  e.preventDefault()
 
-        try {
-            const response = await fetch('/submit_feedback', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            });
+  const formData = new FormData(feedbackForm)
+  const company = formData.get("company")
+  const comment = formData.get("comment")
 
-            const result = await response.json();
-            
-            if (result.success) {
-                // Add new feedback card to top
-                const newCard = createFeedbackCard(result.feedback);
-                hofGrid.insertBefore(newCard, hofGrid.firstChild);
-                
-                // Reset form and close overlay
-                feedbackForm.reset();
-                feedbackOverlay.style.display = 'none';
-            }
-        } catch (error) {
-            console.error('Error submitting feedback:', error);
-            alert('Error submitting feedback. Please try again.');
-        }
-    });
+  console.log("[v0] Submitting feedback:", { company, comment })
 
-    function createFeedbackCard(feedback) {
-        const card = document.createElement('div');
-        card.className = 'feedback-card';
-        card.innerHTML = `
-            <div class="card-header">
-                <div class="company-info">
-                    <img src="${feedback.company_logo}" alt="${feedback.company_name}" class="company-logo">
-                    <span>${feedback.company_name}</span>
-                </div>
-                <div class="sentiment-info">
-                    <span class="sentiment-tag ${feedback.sentiment}">${feedback.sentiment.charAt(0).toUpperCase() + feedback.sentiment.slice(1)}</span>
-                </div>
-            </div>
-            <div class="card-content">
-                <p>"${feedback.comment}"</p>
-            </div>
-        `;
-        return card;
+  try {
+    // Send to backend - adjust endpoint as needed
+    const response = await fetch("/api/feedback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        company: company,
+        comment: comment,
+        timestamp: new Date().toISOString(),
+      }),
+    })
+
+    if (response.ok) {
+      console.log("[v0] Feedback submitted successfully")
+      feedbackForm.reset()
+      feedbackOverlay.classList.remove("active")
+      document.body.style.overflow = "auto"
+
+      // Optional: Show success message
+      alert("Thank you for your feedback!")
+    } else {
+      console.error("[v0] Failed to submit feedback:", response.status)
+      alert("Failed to submit feedback. Please try again.")
     }
-});
+  } catch (error) {
+    console.error("[v0] Error submitting feedback:", error)
+    alert("An error occurred. Please try again.")
+  }
+})
+
+// Company Grid Selection
+const companyGrid = document.getElementById("companyGrid")
+if (companyGrid) {
+  const companyBoxes = companyGrid.querySelectorAll(".company-box")
+
+  companyBoxes.forEach((box) => {
+    box.addEventListener("click", () => {
+      const companyName = box.getAttribute("data-company")
+      console.log("[v0] Selected company:", companyName)
+
+      // Optional: Filter feedback by company or perform other actions
+      // You can add filtering logic here
+    })
+  })
+}
+
+// Keyboard shortcut to open feedback modal (Ctrl/Cmd + K)
+document.addEventListener("keydown", (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+    e.preventDefault()
+    feedbackOverlay.classList.add("active")
+    document.body.style.overflow = "hidden"
+  }
+})
+
+// Close modal with Escape key
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && feedbackOverlay.classList.contains("active")) {
+    feedbackOverlay.classList.remove("active")
+    document.body.style.overflow = "auto"
+  }
+})
+
+console.log("[v0] Openfeed UI initialized successfully")

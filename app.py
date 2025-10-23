@@ -1,11 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-import requests
 import os
-from dotenv import load_dotenv
 from datetime import datetime
-
-load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'openfeed-secret'
@@ -13,43 +9,19 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///openfeed.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# Logo.dev token from environment
-LOGO_DEV_TOKEN = os.getenv('LOGO_DEV_TOKEN')
-
-# Companies list
+# Companies list with local logo paths
 COMPANIES = [
-    {"name": "Google", "domain": "google.com"},
-    {"name": "Apple", "domain": "apple.com"},
-    {"name": "Microsoft", "domain": "microsoft.com"},
-    {"name": "Amazon", "domain": "amazon.com"},
-    {"name": "Netflix", "domain": "netflix.com"},
-    {"name": "Tesla", "domain": "tesla.com"},
-    {"name": "Facebook", "domain": "facebook.com"},
-    {"name": "Twitter", "domain": "twitter.com"},
-    {"name": "Spotify", "domain": "spotify.com"},
-    {"name": "Lyft", "domain": "lyft.com"},
-    {"name": "Dropbox", "domain": "dropbox.com"},
-    {"name": "Slack", "domain": "slack.com"},
-    {"name": "HubSpot", "domain": "hubspot.com"},
-    {"name": "Salesforce", "domain": "salesforce.com"},
-    {"name": "Shopify", "domain": "shopify.com"},
-    {"name": "Zoom", "domain": "zoom.us"},
-    {"name": "Asana", "domain": "asana.com"},
-    {"name": "Monday.com", "domain": "monday.com"},
-    {"name": "Atlassian", "domain": "atlassian.com"},
-    {"name": "Pinterest", "domain": "pinterest.com"},
-    {"name": "TikTok", "domain": "tiktok.com"},
-    {"name": "Snapchat", "domain": "snapchat.com"},
-    {"name": "Uber", "domain": "uber.com"},
-    {"name": "Adobe", "domain": "adobe.com"},
-    {"name": "Intel", "domain": "intel.com"},
-    {"name": "IBM", "domain": "ibm.com"},
-    {"name": "Oracle", "domain": "oracle.com"},
-    {"name": "Samsung", "domain": "samsung.com"},
-    {"name": "Sony", "domain": "sony.com"},
-    {"name": "Nintendo", "domain": "nintendo.com"}
+    {"name": "Google", "domain": "google.com", "logo": "/static/logos/google.png"},
+    {"name": "Apple", "domain": "apple.com", "logo": "static/logos/apple.png"},
+    {"name": "Microsoft", "domain": "microsoft.com", "logo": "static/logos/microsoft.png"},
+    {"name": "Amazon", "domain": "amazon.com", "logo": "static/logos/amazon.png"},
+    {"name": "Netflix", "domain": "netflix.com", "logo": "static/logos/netflix.png"},
+    {"name": "Tesla", "domain": "tesla.com", "logo": "static/logos/tesla.png"},
+    {"name": "Meta", "domain": "meta.com", "logo": "static/logos/meta.png"},
+    {"name": "Twitter", "domain": "twitter.com", "logo": "static/logos/twitter.png"},
+    {"name": "Uber", "domain": "uber.com", "logo": "static/logos/uber.png"},
+    {"name": "Adobe", "domain": "adobe.com", "logo": "static/logos/adobe.png"}
 ]
-
 
 class Feedback(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -59,27 +31,12 @@ class Feedback(db.Model):
     sentiment = db.Column(db.String(20), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
-
-def get_company_logo(domain):
-    """Get company logo using Logo.dev API"""
-    if not LOGO_DEV_TOKEN:
-        return (
-            f"https://via.placeholder.com/50x50/4285f4/ffffff?"
-            f"text={domain[0].upper()}"
-        )
-
-    try:
-        logo_url = f"https://img.logo.dev/{domain}?token={LOGO_DEV_TOKEN}"
-        response = requests.head(logo_url, timeout=5)
-        if response.status_code == 200:
-            return logo_url
-    except Exception:
-        pass
-    return (
-        f"https://via.placeholder.com/50x50/4285f4/ffffff?"
-        f"text={domain[0].upper()}"
-    )
-
+def get_company_logo(company_name):
+    """Get company logo from static folder"""
+    company = next((c for c in COMPANIES if c['name'] == company_name), None)
+    if company and os.path.exists(company['logo']):
+        return f"/{company['logo']}"
+    return "/static/logos/placeholder.png"
 
 def analyze_sentiment(text):
     """Simple sentiment analysis"""
@@ -103,13 +60,10 @@ def analyze_sentiment(text):
     else:
         return "neutral"
 
-
 @app.route('/')
 def index():
     feedbacks = Feedback.query.order_by(Feedback.date_created.desc()).all()
-    return render_template('index.html', feedbacks=feedbacks,
-                           companies=COMPANIES)
-
+    return render_template('index.html', feedbacks=feedbacks, companies=COMPANIES)
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
@@ -117,9 +71,8 @@ def submit_feedback():
     company_name = data['company']
     comment = data['comment']
 
-    # Get company logo
-    company = next((c for c in COMPANIES if c['name'] == company_name), None)
-    logo = get_company_logo(company['domain']) if company else ""
+    # Get company logo from static folder
+    logo = get_company_logo(company_name)
 
     # Analyze sentiment
     sentiment = analyze_sentiment(comment)
@@ -144,7 +97,6 @@ def submit_feedback():
             'sentiment': sentiment
         }
     })
-
 
 if __name__ == '__main__':
     with app.app_context():
