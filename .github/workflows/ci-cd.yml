@@ -1,4 +1,4 @@
-name: Openfeed CI/CD
+name: Openfeed CI/CD with Render Deploy
 on:
   push:
     branches: [ main, develop ]
@@ -46,3 +46,12 @@ jobs:
         context: .
         push: true
         tags: abhirajadhikary06/openfeed:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - name: Trigger Render Deploy
+      run: |
+        curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
