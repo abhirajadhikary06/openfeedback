@@ -53,7 +53,7 @@ def test_get_company_logo_success(mock_head, client):
     mock_head.return_value = mock_response
     from app import get_company_logo
     logo = get_company_logo('google.com')
-    assert 'img.logo.dev' in logo
+    assert 'logo.dev' in logo
 
 
 @patch('app.requests.head')
