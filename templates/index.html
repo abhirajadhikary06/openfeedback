@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hall of Fame - Openfeed</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="hof-container">
+        <!-- Floating Feedback Button -->
+        <button class="floating-feedback-btn" id="feedbackBtn">
+            <i class="fas fa-plus"></i>
+            <span>Feedback</span>
+        </button>
+
+        <!-- Feedback Overlay -->
+        <div class="feedback-overlay" id="feedbackOverlay">
+            <div class="feedback-modal">
+                <div class="modal-header">
+                    <h3>Share Your Feedback</h3>
+                    <button class="close-btn" id="closeFeedback">×</button>
+                </div>
+                <form id="feedbackForm">
+                    <div class="company-selector">
+                        {% for company in companies %}
+                        <label class="company-option">
+                            <input type="radio" name="company" value="{{ company.name }}" required>
+                            <img src="https://img.logo.dev/{{ company.domain }}?token={{ config.LOGO_DEV_TOKEN if config.LOGO_DEV_TOKEN else '' }}" 
+                                 onerror="this.src='https://via.placeholder.com/40x40/4285f4/ffffff?text={{ company.name[0].upper() }}'" 
+                                 alt="{{ company.name }}">
+                            <span>{{ company.name }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                    <textarea name="comment" placeholder="Write your feedback..." required></textarea>
+                    <button type="submit">Submit Feedback</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Feedback Cards -->
+        <div class="hof-grid" id="hofGrid">
+            {% for feedback in feedbacks %}
+            <div class="feedback-card">
+                <div class="card-header">
+                    <div class="company-info">
+                        <img src="{{ feedback.company_logo }}" alt="{{ feedback.company_name }}" class="company-logo">
+                        <span>{{ feedback.company_name }}</span>
+                    </div>
+                    <div class="sentiment-info">
+                        <span class="sentiment-tag {{ feedback.sentiment }}">{{ feedback.sentiment.title() }}</span>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <p>"{{ feedback.comment }}"</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

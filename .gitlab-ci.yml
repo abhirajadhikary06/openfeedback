@@ -1,0 +1,59 @@
+stages:
+  - test
+  - build
+  - deploy-preview
+  - deploy-prod
+
+variables:
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: "/certs"
+  IMAGE_NAME: $CI_REGISTRY_IMAGE/openfeed
+
+test:
+  stage: test
+  image: python:3.9
+  script:
+    - pip install -r requirements.txt
+    - pip install pytest flake8
+    - flake8 .
+    - pytest
+  variables:
+    LOGO_DEV_TOKEN: $LOGO_DEV_TOKEN
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" || $CI_COMMIT_BRANCH == "main"
+
+build:
+  stage: build
+  image: docker:24.0
+  services:
+    - docker:24.0-dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build --build-arg LOGO_DEV_TOKEN=$LOGO_DEV_TOKEN -t $IMAGE_NAME:$CI_COMMIT_SHA .
+    - docker push $IMAGE_NAME:$CI_COMMIT_SHA
+    - docker tag $IMAGE_NAME:$CI_COMMIT_SHA $IMAGE_NAME:latest
+    - docker push $IMAGE_NAME:latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+
+deploy-preview:
+  stage: deploy-preview
+  image: alpine
+  script:
+    - echo "Preview environment: $CI_COMMIT_REF_SLUG"
+  environment:
+    name: preview/$CI_COMMIT_REF_SLUG
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+deploy-prod:
+  stage: deploy-prod
+  image: alpine
+  script:
+    - echo "Deploying to PRODUCTION"
+  environment:
+    name: production
+  when: manual
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
