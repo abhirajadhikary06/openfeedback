@@ -564,6 +564,124 @@
             box-shadow: 4px 4px 0px 0px var(--white);
         }
 
+        /* Footer Styling */
+        .site-footer {
+            background: var(--darker);
+            border-top: 3px solid var(--orange);
+            padding: 4rem 2rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .footer-brand .brand-text {
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            font-weight: 700;
+            color: var(--orange-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-desc {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            max-width: 300px;
+        }
+
+        .footer-heading {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--gray-400);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            color: var(--purple-light);
+            padding-left: 5px;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: var(--dark);
+            border: 2px solid var(--gray-700);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 4px 4px 0px 0px var(--gray-700);
+        }
+
+        .social-link:hover {
+            border-color: var(--orange);
+            color: var(--orange);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px var(--orange);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 2px solid var(--gray-700);
+            text-align: center;
+            color: var(--gray-400);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .footer-socials {
+                justify-content: center;
+            }
+            .footer-desc {
+                margin: 0 auto;
+            }
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .floating-navbar {
@@ -722,6 +840,51 @@
             </form>
         </div>
     </div>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="navbar-brand" style="margin-bottom: 1.5rem;">
+                    <span class="brand-icon"><i class="fas fa-bolt"></i></span>
+                    <span class="brand-text">openfeed..</span>
+                </div>
+                <p class="footer-tagline">"OpenFeedback - Share Your Voice, Shape the Future"</p>
+                <p class="footer-desc">A community-driven platform dedicated to transparency and improving services through honest feedback.</p>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#hofGrid">Hall of Fame</a></li>
+                    <li><a href="javascript:void(0)" onclick="document.getElementById('feedbackBtn').click()">Submit Feedback</a></li>
+                    <li><a href="#">About Us</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Legal & Info</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="footer-heading">Connect</h4>
+                <div class="footer-socials">
+                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 OpenFeedback. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
