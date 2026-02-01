@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Feedback Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .profile-container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+        .profile-header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .profile-details h1 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .profile-details p {
+            margin: 5px 0;
+            color: #666;
+        }
+        .nav-bar {
+            background: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-bar a {
+            color: #4CAF50;
+            text-decoration: none;
+            margin-right: 15px;
+        }
+        .nav-bar a:hover {
+            text-decoration: underline;
+        }
+        .feedback-section {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .feedback-section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .feedback-item {
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            transition: box-shadow 0.3s;
+        }
+        .feedback-item:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .feedback-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .feedback-item p {
+            color: #666;
+            margin: 5px 0;
+        }
+        .feedback-meta {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .no-feedback {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        .btn-logout {
+            background: #f44336;
+            color: white;
+            padding: 8px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-logout:hover {
+            background: #da190b;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="nav-bar">
+            <div>
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('auth.profile') }}">My Profile</a>
+            </div>
+            <a href="{{ url_for('auth.logout') }}" class="btn-logout">Logout</a>
+        </div>
+
+        <div class="profile-header">
+            <div class="profile-info">
+                <div class="profile-avatar">
+                    {{ user.username[0].upper() }}
+                </div>
+                <div class="profile-details">
+                    <h1>{{ user.username }}</h1>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <p><strong>Member since:</strong> {{ user.created_at }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="feedback-section">
+            <h2>My Feedback Submissions</h2>
+            
+            {% if feedback_list %}
+                {% for feedback in feedback_list %}
+                    <div class="feedback-item">
+                        <h3>{{ feedback.title }}</h3>
+                        <p>{{ feedback.description }}</p>
+                        <div class="feedback-meta">
+                            {% if feedback.category %}
+                                <span>Category: <strong>{{ feedback.category }}</strong></span>
+                            {% endif %}
+                            <span class="status-badge status-{{ feedback.status }}">
+                                {{ feedback.status.upper() }}
+                            </span>
+                            <span>Submitted: {{ feedback.created_at }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-feedback">
+                    <p>You haven't submitted any feedback yet.</p>
+                    <a href="{{ url_for('index') }}" style="color: #4CAF50;">Submit your first feedback</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
