@@ -1,9 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <link rel="icon" href="{{ url_for('static', filename='assets/openfeed.ico') }}" type="image/x-icon">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='assets/openfeed.ico') }}"
+      type="image/x-icon"
+    />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Openfeed</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -737,108 +741,146 @@
     </style>
 </head>
 <body>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="{{ url_for('static', filename='css/main.css') }}"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <!-- Floating Center Navbar -->
     <nav class="floating-navbar">
-        <div class="navbar-content">
-            <div class="navbar-brand">
-                <span class="brand-icon"><i class="fas fa-bolt"></i></span>
-                <span class="brand-text">openfeed..</span>
-            </div>
-            <button class="feedback-trigger-btn" id="feedbackBtn">
-                <i class="fas fa-plus"></i>
-                <span>Share Feedback</span>
-            </button>
+      <div class="navbar-content">
+        <div class="navbar-brand">
+          <span class="brand-icon"><i class="fas fa-bolt"></i></span>
+          <span class="brand-text">openfeed..</span>
         </div>
+        <button class="feedback-trigger-btn" id="feedbackBtn">
+          <i class="fas fa-plus"></i>
+          <span>Share Feedback</span>
+        </button>
+      </div>
     </nav>
 
     <!-- Main Container -->
     <div class="main-container">
-        <!-- Header Section -->
-        <header class="header-section">
-            <div class="header-content">
-                <h1 class="header-title">Hall of Fame</h1>
-                <p class="header-subtitle">Discover the most valuable feedback from our community</p>
-            </div>
-        </header>
+      <!-- Header Section -->
+      <header class="header-section">
+        <div class="header-content">
+          <h1 class="header-title">Hall of Fame</h1>
+          <p class="header-subtitle">
+            Discover the most valuable feedback from our community
+          </p>
+        </div>
+      </header>
 
-        <!-- Feedback Cards Section -->
-        <section class="feedback-section">
-            <div class="section-header">
-                <h2>Community Feedback</h2>
-            </div>
-            
-            <div class="feedback-grid" id="hofGrid">
-                {% for feedback in feedbacks %}
-                <div class="feedback-box">
-                    <div class="feedback-box-header">
-                        <div class="feedback-company">
-                            {% if feedback.company_logo %}
-                                <img class="feedback-company-logo" src="{{ feedback.company_logo }}" alt="{{ feedback.company_name }} logo">
-                            {% else %}
-                                <div class="feedback-company-logo" style="background-color: #4285f4; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                                    {{ feedback.company_name[0].upper() }}
-                                </div>
-                            {% endif %}
-                            <span class="feedback-company-name">{{ feedback.company_name }}</span>
-                        </div>
-                        <span class="sentiment-badge {{ feedback.sentiment }}">{{ feedback.sentiment.title() }}</span>
-                    </div>
-                    <div class="feedback-box-content">
-                        <p class="feedback-text">"{{ feedback.comment }}"</p>
-                    </div>
+      <!-- Feedback Cards Section -->
+      <section class="feedback-section">
+        <div class="section-header">
+          <h2>Community Feedback</h2>
+        </div>
+
+        <div class="feedback-grid" id="hofGrid">
+          {% for feedback in feedbacks %}
+          <div class="feedback-box">
+            <div class="feedback-box-header">
+              <div class="feedback-company">
+                {% if feedback.company_logo %}
+                <img
+                  class="feedback-company-logo"
+                  src="{{ feedback.company_logo }}"
+                  alt="{{ feedback.company_name }} logo"
+                />
+                {% else %}
+                <div
+                  class="feedback-company-logo"
+                  style="
+                    background-color: #4285f4;
+                    color: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                  "
+                >
+                  {{ feedback.company_name[0].upper() }}
                 </div>
-                {% endfor %}
+                {% endif %}
+                <span class="feedback-company-name"
+                  >{{ feedback.company_name }}</span
+                >
+              </div>
+              <span class="sentiment-badge {{ feedback.sentiment }}"
+                >{{ feedback.sentiment.title() }}</span
+              >
             </div>
-        </section>
+            <div class="feedback-box-content">
+              <p class="feedback-text">"{{ feedback.comment }}"</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </section>
     </div>
 
     <!-- Feedback Modal -->
     <div class="modal-overlay" id="feedbackOverlay">
-        <div class="modal-box">
-            <div class="modal-header">
-                <h3>Share Your Feedback</h3>
-                <button class="modal-close" id="closeFeedback">
-                    <i class="fa-solid fa-xmark" style="color: #ffffff;"></i>
-                </button>
-            </div>
-
-            <form id="feedbackForm" class="feedback-form" action="/submit-feedback" method="post">
-                <!-- Company Selection in Modal - Dropdown -->
-                <div class="form-section">
-                    <label class="form-label">
-                        <span>Select a Company</span>
-                    </label>
-                    <div class="company-dropdown">
-                        <select class="company-select" name="company" required>
-                            <option value="" disabled selected>Choose a company...</option>
-                            {% for company in companies %}
-                            <option value="{{ company.name }}" data-logo="{{ company.name[0].upper() }}">{{ company.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Feedback Text -->
-                <div class="form-section">
-                    <label class="form-label" for="feedbackText">
-
-                        Your Feedback
-                    </label>
-                    <textarea 
-                        id="feedbackText"
-                        name="comment" 
-                        placeholder="Share your thoughts, suggestions, or feedback..." 
-                        required
-                        class="feedback-textarea"></textarea>
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" class="submit-btn">
-                    <i class="fas fa-paper-plane"></i>
-                    Submit Feedback
-                </button>
-            </form>
+      <div class="modal-box">
+        <div class="modal-header">
+          <h3>Share Your Feedback</h3>
+          <button class="modal-close" id="closeFeedback">
+            <i class="fa-solid fa-xmark" style="color: #ffffff"></i>
+          </button>
         </div>
+
+        <form
+          id="feedbackForm"
+          class="feedback-form"
+          action="/submit-feedback"
+          method="post"
+        >
+          <!-- Company Selection in Modal - Dropdown -->
+          <div class="form-section">
+            <label class="form-label">
+              <span>Select a Company</span>
+            </label>
+            <div class="company-dropdown">
+              <select class="company-select" name="company" required>
+                <option value="" disabled selected>Choose a company...</option>
+                {% for company in companies %}
+                <option
+                  value="{{ company.name }}"
+                  data-logo="{{ company.name[0].upper() }}"
+                >
+                  {{ company.name }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <!-- Feedback Text -->
+          <div class="form-section">
+            <label class="form-label" for="feedbackText"> Your Feedback </label>
+            <textarea
+              id="feedbackText"
+              name="comment"
+              placeholder="Share your thoughts, suggestions, or feedback..."
+              required
+              class="feedback-textarea"
+            ></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="submit-btn">
+            <i class="fas fa-paper-plane"></i>
+            Submit Feedback
+          </button>
+        </form>
+      </div>
     </div>
 
     <footer class="site-footer">
@@ -947,4 +989,7 @@
         });
     </script>
 </body>
+</html>
+    <script src="{{ url_for('static', filename='js/feedback.js') }}"></script>
+  </body>
 </html>
