@@ -64,6 +64,14 @@ openfeed/
 
 ```
 
+## Working on a Branch (GitHub)
+
+1. Fetch latest: `git fetch origin`
+2. Create and switch: `git checkout -b feature/your-branch origin/main`
+3. Commit locally: `git add .` then `git commit -m "feat: describe change"`
+4. Push branch: `git push -u origin feature/your-branch`
+5. Open a pull request on GitHub targeting `main`.
+
 ## CI/CD Pipelines
 
 - Automated testing with pytest
