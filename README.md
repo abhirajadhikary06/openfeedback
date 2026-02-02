@@ -67,7 +67,7 @@ openfeed/
 ## Working on a Branch (GitHub)
 
 1. Fetch latest: `git fetch origin`
-2. Create and switch: `git checkout -b feature/your-branch origin/main`
+2. Update main then branch: `git checkout main && git pull origin main && git checkout -b feature/your-branch` (or if already on an updated main: `git checkout -b feature/your-branch`)
 3. Commit locally: `git add .` then `git commit -m "feat: describe change"`
 4. Push branch: `git push -u origin feature/your-branch`
 5. Open a pull request on GitHub targeting `main`.
