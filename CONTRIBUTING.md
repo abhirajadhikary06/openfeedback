@@ -79,7 +79,7 @@ Thank you for your interest in contributing to OpenFeedback (n_n). This document
 
 #### Python Best Practices
 - Use list comprehensions instead of loops when appropriate
-- Avoid mutable default arguments: `def func(arg=[]):` ❌ → `def func(arg=None):` ✅
+- Avoid mutable default arguments: `def func(arg=[]):`  → `def func(arg=None):` 
 - Use context managers (`with` statements) for file/resource handling
 - Write unit tests for all public methods
 - Use `logging` module instead of `print()` for debugging
