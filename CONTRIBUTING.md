@@ -5,7 +5,7 @@ Thank you for your interest in contributing to OpenFeedback! This document provi
 ## Getting Started
 
 ### Prerequisites
-- Python 3.x
+- [Python 3.x]
 - Git
 - pip (Python package manager)
 
@@ -157,3 +157,11 @@ openfeedback/
 By contributing to OpenFeedback, you agree that your contributions will be licensed under the same license as the project.
 
 Thank you for contributing! 🎉
+
+
+
+
+
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
+
+
