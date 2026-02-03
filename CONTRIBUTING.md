@@ -1,13 +1,14 @@
 # Contributing to OpenFeedback
 
-Thank you for your interest in contributing to OpenFeedback! This document provides guidelines and instructions for contributing to the project.
+Thank you for your interest in contributing to OpenFeedback (n_n). This document provides guidelines and instructions for contributing to the project.
 
 ## Getting Started
 
 ### Prerequisites
-- [Python 3.x]
-- Git
-- pip (Python package manager)
+[![Python 3.x](https://img.shields.io/badge/Python-3.x-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/)
+[![Git](https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white)](https://git-scm.com/)
+[![pip](https://img.shields.io/badge/pip-Package%20Manager-3775A9?style=flat&logo=python&logoColor=white)](https://pip.pypa.io/en/stable/)
+[![SQLite](https://img.shields.io/badge/SQLite-%2307405e?style=flat&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 
 ### Setting Up Your Development Environment
 
@@ -156,12 +157,4 @@ openfeedback/
 
 By contributing to OpenFeedback, you agree that your contributions will be licensed under the same license as the project.
 
-Thank you for contributing! 🎉
-
-
-
-
-
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
-
-
+Thank you for contributing!
