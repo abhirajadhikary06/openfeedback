@@ -141,5 +141,15 @@ openfeed/
 
 Google, Apple, Microsoft, Amazon, Netflix, Tesla, Facebook, Twitter, Spotify, and 22 more.
 
+## Contributors
+
+Thanks to all the amazing contributors who have helped make this project better! 🎉
+
+<a href="https://github.com/rudrabhowmick/openfeedback/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=rudrabhowmick/openfeedback" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
+
 ## License
 MIT License
