@@ -61,7 +61,7 @@ def test_submit_feedback_valid_data(client):
     json_data = response.get_json()
     assert json_data['success']
 
-
+# Test COMPANIES data to be removed in future refactor
 def test_companies_list_not_empty():
     assert len(COMPANIES) > 0
     assert COMPANIES[0]['name'] == 'Google'
