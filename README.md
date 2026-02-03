@@ -149,7 +149,5 @@ Thanks to all the amazing contributors who have helped make this project better!
   <img src="https://contrib.rocks/image?repo=rudrabhowmick/openfeedback" />
 </a>
 
-Made with [contrib.rocks](https://contrib.rocks).
-
 ## License
 MIT License
