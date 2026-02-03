@@ -72,10 +72,21 @@ flowchart TD
     F -->|Company Logos| O[Static Assets]
     O -->|Serve Images| B
     
-    style A fill:#e1f5ff
-    style K fill:#ffe1e1
-    style H fill:#fff4e1
-    style G fill:#e1ffe1
+    style A fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style K fill:#E24A4A,stroke:#8A2E2E,stroke-width:2px,color:#fff
+    style B fill:#9B59B6,stroke:#6C3483,stroke-width:2px,color:#fff
+    style C fill:#E67E22,stroke:#A04000,stroke-width:2px,color:#fff
+    style D fill:#1ABC9C,stroke:#117A65,stroke-width:2px,color:#fff
+    style E fill:#3498DB,stroke:#21618C,stroke-width:2px,color:#fff
+    style F fill:#E74C3C,stroke:#943126,stroke-width:2px,color:#fff
+    style G fill:#2ECC71,stroke:#1E8449,stroke-width:2px,color:#fff
+    style H fill:#F39C12,stroke:#B9770E,stroke-width:2px,color:#fff
+    style I fill:#16A085,stroke:#0E6655,stroke-width:2px,color:#fff
+    style J fill:#8E44AD,stroke:#5B2C6F,stroke-width:2px,color:#fff
+    style L fill:#C0392B,stroke:#78281F,stroke-width:2px,color:#fff
+    style M fill:#D35400,stroke:#873600,stroke-width:2px,color:#fff
+    style N fill:#27AE60,stroke:#186A3B,stroke-width:2px,color:#fff
+    style O fill:#2980B9,stroke:#1B4F72,stroke-width:2px,color:#fff
 ```
 
 **Flow Description:**
