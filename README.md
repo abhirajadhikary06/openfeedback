@@ -40,6 +40,52 @@ Visit `http://localhost:5000`
 
 - Docker (containerization)
 
+## Architecture Diagram
+
+```mermaid
+flowchart TD
+    A[User/Visitor] -->|Browse| B[Frontend - HTML/CSS/JS]
+    A -->|Register/Login| C[Auth Module]
+    
+    C -->|Authenticate| D[Session Management]
+    D -->|Valid Session| E[User Dashboard]
+    
+    E -->|Submit Feedback| F[Flask Backend]
+    B -->|View Public Feedback| F
+    
+    F -->|Analyze Text| G[Sentiment Analysis Engine]
+    G -->|positive/negative/neutral| F
+    
+    F -->|Save| H[(SQLite Database)]
+    F -->|Retrieve| H
+    
+    H -->|Store| I[User Data]
+    H -->|Store| J[Feedback Data]
+    
+    K[Admin User] -->|Access| L[Admin Dashboard]
+    L -->|Moderate| M[Pending Feedback Queue]
+    M -->|Approve/Reject| H
+    
+    F -->|Filter & Search| N[API Endpoints]
+    N -->|Return JSON| B
+    
+    F -->|Company Logos| O[Static Assets]
+    O -->|Serve Images| B
+    
+    style A fill:#e1f5ff
+    style K fill:#ffe1e1
+    style H fill:#fff4e1
+    style G fill:#e1ffe1
+```
+
+**Flow Description:**
+1. **User Registration/Login**: Users authenticate via the auth module with session management
+2. **Feedback Submission**: Logged-in users submit feedback for companies
+3. **Sentiment Analysis**: Text is automatically analyzed for positive/negative/neutral sentiment
+4. **Database Storage**: All data persists in SQLite database
+5. **Admin Moderation**: Admins review and approve/reject pending feedback
+6. **Public Display**: Approved feedback is displayed to all visitors with filtering and search capabilities
+
 ## Project Structure
 
 ```
