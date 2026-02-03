@@ -65,34 +65,35 @@ Thank you for your interest in contributing to OpenFeedback (n_n). This document
 
 ## Code Style Guidelines
 
-- Follow [PEP 8](https://www.python.org/dev/peps/pep-0008/) for Python code
-- Use meaningful variable and function names
-- Add docstrings to functions and classes
-- Keep functions focused and reasonably sized
-- Comment complex logic clearly
+### Python Code
+- Follow [PEP 8](https://www.python.org/dev/peps/pep-0008/) for all Python code
+- Use meaningful variable and function names (snake_case for variables/functions, PascalCase for classes)
+- Add docstrings to all functions and classes using the Google-style format
+- Keep functions focused and reasonably sized (aim for <50 lines)
+- Comment complex logic clearly with inline comments
+- Use type hints for function parameters and return values
+- Avoid magic numbers; use named constants instead
+- Import statements should be organized: standard library → third-party → local imports
+- Maximum line length: 79 characters for code, 72 for docstrings/comments
+- Use `==` for equality checks with strings/None, not `is`
 
-### Python Code Example
-```python
-def calculate_feedback_score(feedback_items):
-    """
-    Calculate the average score from feedback items.
-    
-    Args:
-        feedback_items: List of feedback dictionaries with 'score' keys
-        
-    Returns:
-        float: Average score or 0 if no items provided
-    """
-    if not feedback_items:
-        return 0
-    return sum(item['score'] for item in feedback_items) / len(feedback_items)
-```
+#### Python Best Practices
+- Use list comprehensions instead of loops when appropriate
+- Avoid mutable default arguments: `def func(arg=[]):` ❌ → `def func(arg=None):` ✅
+- Use context managers (`with` statements) for file/resource handling
+- Write unit tests for all public methods
+- Use `logging` module instead of `print()` for debugging
+- Handle exceptions explicitly; avoid bare `except:` clauses
+- Use f-strings for string formatting (Python 3.6+)
 
 ### JavaScript Code
 - Use consistent indentation (2 or 4 spaces)
-- Use meaningful variable names
+- Use meaningful variable names (camelCase for variables/functions, PascalCase for classes)
 - Avoid global variables when possible
 - Add comments for complex logic
+- Use `const` by default, `let` for variables that need reassignment, avoid `var`
+- Use arrow functions when appropriate
+- Add JSDoc comments for functions
 
 ## Testing
 
