@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
           // Add the new feedback to the page dynamically
           addFeedbackToPage(data.feedback);
         } else {
-          alert("Error submitting feedback: " + data.message);
+          alert("Error submitting feedback: " + (data.message || "Unknown error"));
         }
       })
       .catch((error) => {
@@ -69,35 +69,41 @@ document.addEventListener("DOMContentLoaded", function () {
    * @param {Object} feedback - The feedback object from the server response
    */
   function addFeedbackToPage(feedback) {
-    const feedbackGrid = document.getElementById("hofGrid");
+    // Use the feedback manager if available, otherwise fall back to direct DOM manipulation
+    if (window.feedbackManager) {
+      window.feedbackManager.addNewFeedback(feedback);
+    } else {
+      // Fallback to original method
+      const feedbackGrid = document.getElementById("hofGrid");
 
-    // Create the new feedback card HTML
-    const feedbackCard = document.createElement("div");
-    feedbackCard.className = "feedback-box";
-    feedbackCard.style.animation = "modalSlideIn 0.5s ease";
+      // Create the new feedback card HTML
+      const feedbackCard = document.createElement("div");
+      feedbackCard.className = "feedback-box";
+      feedbackCard.style.animation = "modalSlideIn 0.5s ease";
 
-    feedbackCard.innerHTML = `
-      <div class="feedback-box-header">
-        <div class="feedback-company">
-          ${
-            feedback.company_logo
-              ? `<img class="feedback-company-logo" src="${feedback.company_logo}" alt="${feedback.company_name} logo">`
-              : `<div class="feedback-company-logo" style="background-color: #4285f4; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                  ${feedback.company_name[0].toUpperCase()}
-                </div>`
-          }
-          <span class="feedback-company-name">${feedback.company_name}</span>
+      feedbackCard.innerHTML = `
+        <div class="feedback-box-header">
+          <div class="feedback-company">
+            ${
+              feedback.company_logo
+                ? `<img class="feedback-company-logo" src="${feedback.company_logo}" alt="${feedback.company_name} logo">`
+                : `<div class="feedback-company-logo" style="background-color: #4285f4; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                    ${feedback.company_name[0].toUpperCase()}
+                  </div>`
+            }
+            <span class="feedback-company-name">${feedback.company_name}</span>
+          </div>
+          <span class="sentiment-badge ${feedback.sentiment}">
+            ${feedback.sentiment.charAt(0).toUpperCase() + feedback.sentiment.slice(1)}
+          </span>
         </div>
-        <span class="sentiment-badge ${feedback.sentiment}">
-          ${feedback.sentiment.charAt(0).toUpperCase() + feedback.sentiment.slice(1)}
-        </span>
-      </div>
-      <div class="feedback-box-content">
-        <p class="feedback-text">"${feedback.comment}"</p>
-      </div>
-    `;
+        <div class="feedback-box-content">
+          <p class="feedback-text">"${feedback.comment}"</p>
+        </div>
+      `;
 
-    // Add the new feedback card at the beginning of the grid
-    feedbackGrid.insertBefore(feedbackCard, feedbackGrid.firstChild);
+      // Add the new feedback card at the beginning of the grid
+      feedbackGrid.insertBefore(feedbackCard, feedbackGrid.firstChild);
+    }
   }
 });

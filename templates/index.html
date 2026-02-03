@@ -262,6 +262,307 @@
             font-size: 1rem;
         }
 
+        /* Feedback Controls */
+        .feedback-controls {
+            background: var(--darker);
+            border: 3px solid var(--purple);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin: 0 auto 2rem;
+            max-width: 1000px;
+            box-shadow: 6px 6px 0px 0px var(--purple-light);
+        }
+
+        /* Search Container */
+        .search-container {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-input-wrapper {
+            position: relative;
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .filter-toggle-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: var(--purple);
+            color: var(--white);
+            border: 3px solid var(--white);
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 4px 4px 0px 0px var(--purple-light);
+            font-family: inherit;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .filter-toggle-btn:hover {
+            background: var(--purple-light);
+            transform: translate(-1px, -1px);
+            box-shadow: 5px 5px 0px 0px var(--purple-light);
+        }
+
+        .filter-toggle-btn:active {
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0px 0px var(--purple-light);
+        }
+
+        .filter-toggle-btn.active {
+            background: var(--orange);
+            border-color: var(--orange-light);
+            box-shadow: 4px 4px 0px 0px var(--orange-light);
+        }
+
+        .filter-toggle-btn.active:hover {
+            background: var(--orange-light);
+            box-shadow: 5px 5px 0px 0px var(--orange-light);
+        }
+
+        .filter-toggle-btn.has-active-filters {
+            background: var(--green);
+            border-color: var(--white);
+            box-shadow: 4px 4px 0px 0px rgba(45, 186, 78, 0.7);
+        }
+
+        .filter-toggle-btn.has-active-filters:hover {
+            background: rgba(45, 186, 78, 0.9);
+            box-shadow: 5px 5px 0px 0px rgba(45, 186, 78, 0.7);
+        }
+
+        .filter-toggle-btn.has-active-filters::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background: var(--orange);
+            border-radius: 50%;
+            border: 2px solid var(--white);
+        }
+
+        .filter-toggle-btn {
+            position: relative;
+        }
+
+        .filter-toggle-btn.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .toggle-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .filter-toggle-btn.has-active-filters {
+            background: var(--green);
+            border-color: var(--white);
+            box-shadow: 4px 4px 0px 0px rgba(45, 186, 78, 0.7);
+        }
+
+        .filter-toggle-btn.has-active-filters:hover {
+            background: rgba(45, 186, 78, 0.9);
+            box-shadow: 5px 5px 0px 0px rgba(45, 186, 78, 0.7);
+        }
+
+        .filter-toggle-btn.has-active-filters::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background: var(--orange);
+            border-radius: 50%;
+            border: 2px solid var(--white);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 3rem;
+            background: var(--dark);
+            border: 3px solid var(--gray-700);
+            border-radius: 12px;
+            color: var(--white);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--orange);
+            box-shadow: 0 0 0 3px var(--darker), 0 0 15px rgba(252, 109, 38, 0.3);
+        }
+
+        .search-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 1.1rem;
+        }
+
+        .clear-search-btn {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--gray-400);
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .clear-search-btn:hover {
+            color: var(--orange);
+            background: var(--gray-700);
+        }
+
+        /* Controls Row */
+        .controls-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 1.5rem;
+            align-items: end;
+            justify-content: center;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            opacity: 0;
+            max-height: 0;
+            padding: 0;
+        }
+
+        .controls-row.show {
+            opacity: 1;
+            max-height: 200px;
+            padding: 1.5rem 0 0;
+            margin-bottom: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--gray-300);
+        }
+
+        .filter-label i {
+            color: var(--purple-light);
+            font-size: 0.9rem;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            background: var(--dark);
+            border: 2px solid var(--gray-700);
+            border-radius: 8px;
+            color: var(--white);
+            font-family: inherit;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--purple);
+            box-shadow: 0 0 0 2px var(--darker), 0 0 10px rgba(169, 137, 245, 0.2);
+        }
+
+        .clear-filters-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--gray-700);
+            color: var(--white);
+            border: 2px solid var(--gray-400);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .clear-filters-btn:hover {
+            background: var(--orange-dark);
+            border-color: var(--orange);
+            transform: translateY(-1px);
+        }
+
+        .clear-filters-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Results Info */
+        .results-info {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--gray-700);
+            text-align: center;
+        }
+
+        .results-info span {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* No Results Message */
+        .no-results {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--gray-400);
+            grid-column: 1 / -1;
+        }
+
+        .no-results i {
+            font-size: 3rem;
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+        }
+
+        .no-results h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--gray-300);
+        }
+
+        .no-results p {
+            font-size: 1rem;
+        }
+
         /* Feedback Grid */
         .feedback-grid {
             display: grid;
@@ -723,6 +1024,44 @@
             .modal-box {
                 margin: 1rem;
             }
+
+            /* Responsive Controls */
+            .feedback-controls {
+                margin: 0 1rem 2rem;
+                padding: 1.5rem;
+            }
+
+            .search-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-input-wrapper {
+                max-width: none;
+            }
+
+            .filter-toggle-btn {
+                width: 100%;
+                justify-content: center;
+                max-width: 200px;
+                align-self: center;
+            }
+
+            .controls-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                max-width: none;
+            }
+
+            .controls-row.show {
+                max-height: 400px;
+            }
+
+            .clear-filters-btn {
+                justify-self: center;
+                width: 100%;
+                max-width: 200px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -781,6 +1120,85 @@
       <section class="feedback-section">
         <div class="section-header">
           <h2>Community Feedback</h2>
+        </div>
+
+        <!-- Search, Filter, and Sort Controls -->
+        <div class="feedback-controls">
+          <!-- Search Bar with Filter Button -->
+          <div class="search-container">
+            <div class="search-input-wrapper">
+              <i class="fas fa-search search-icon"></i>
+              <input 
+                type="text" 
+                id="searchInput" 
+                class="search-input" 
+                placeholder="Search feedback by company or content..."
+              >
+              <button id="clearSearch" class="clear-search-btn" style="display: none;">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <button id="toggleFilters" class="filter-toggle-btn">
+              <i class="fas fa-filter"></i>
+              <span>Filters</span>
+              <i class="fas fa-chevron-down toggle-icon"></i>
+            </button>
+          </div>
+
+          <!-- Collapsible Filters and Sort Row -->
+          <div class="controls-row" id="filtersRow" style="display: none;">
+            <!-- Sentiment Filter -->
+            <div class="filter-group">
+              <label class="filter-label">
+                <i class="fas fa-heart"></i>
+                Sentiment
+              </label>
+              <select id="sentimentFilter" class="filter-select">
+                <option value="">All Sentiments</option>
+                <option value="positive">Positive</option>
+                <option value="neutral">Neutral</option>
+                <option value="negative">Negative</option>
+              </select>
+            </div>
+
+            <!-- Company Filter -->
+            <div class="filter-group">
+              <label class="filter-label">
+                <i class="fas fa-building"></i>
+                Company
+              </label>
+              <select id="companyFilter" class="filter-select">
+                <option value="">All Companies</option>
+                {% for company in companies %}
+                <option value="{{ company.name }}">{{ company.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Sort Options -->
+            <div class="filter-group">
+              <label class="filter-label">
+                <i class="fas fa-sort"></i>
+                Sort By
+              </label>
+              <select id="sortSelect" class="filter-select">
+                <option value="recent">Most Recent</option>
+                <option value="oldest">Oldest</option>
+                <option value="helpful">Most Helpful</option>
+              </select>
+            </div>
+
+            <!-- Clear All Filters -->
+            <button id="clearFilters" class="clear-filters-btn">
+              <i class="fas fa-refresh"></i>
+              Clear All
+            </button>
+          </div>
+
+          <!-- Results Info -->
+          <div class="results-info">
+            <span id="resultsCount">{{ feedbacks|length }} feedback(s) found</span>
+          </div>
         </div>
 
         <div class="feedback-grid" id="hofGrid">
@@ -991,5 +1409,6 @@
 </body>
 </html>
     <script src="{{ url_for('static', filename='js/feedback.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/search-filter.js') }}"></script>
   </body>
 </html>

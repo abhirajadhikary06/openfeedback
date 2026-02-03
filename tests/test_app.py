@@ -29,6 +29,27 @@ def test_index_returns_html(client):
 
 
 def test_submit_feedback_valid_data(client):
+    # First create a test user and log them in
+    from app import User
+    from werkzeug.security import generate_password_hash
+    
+    with app.app_context():
+        # Create a test user
+        test_user = User(
+            username='testuser',
+            email='test@example.com',
+            password_hash=generate_password_hash('testpass'),
+            is_admin=False
+        )
+        db.session.add(test_user)
+        db.session.commit()
+        
+        # Log in the test user
+        with client.session_transaction() as sess:
+            sess['user_id'] = test_user.id
+            sess['username'] = test_user.username
+            sess['is_admin'] = test_user.is_admin
+    
     data = {
         'company': 'Google',
         'comment': 'Great product!'
@@ -62,3 +83,65 @@ def test_analyze_sentiment_neutral():
     from app import analyze_sentiment
     result = analyze_sentiment('This is okay.')
     assert result == 'neutral'
+
+
+def test_filter_feedback_api(client):
+    # Create test feedback data
+    from app import Feedback, User
+    from werkzeug.security import generate_password_hash
+    
+    with app.app_context():
+        # Create a test user
+        test_user = User(
+            username='testuser',
+            email='test@example.com',
+            password_hash=generate_password_hash('testpass'),
+            is_admin=False
+        )
+        db.session.add(test_user)
+        db.session.commit()
+        
+        # Create test feedback
+        feedback1 = Feedback(
+            user_id=test_user.id,
+            company_name='Google',
+            company_logo='/static/logos/google.png',
+            comment='Great service!',
+            sentiment='positive',
+            status='approved'
+        )
+        feedback2 = Feedback(
+            user_id=test_user.id,
+            company_name='Apple',
+            company_logo='/static/logos/apple.png',
+            comment='Poor experience',
+            sentiment='negative',
+            status='approved'
+        )
+        db.session.add(feedback1)
+        db.session.add(feedback2)
+        db.session.commit()
+    
+    # Test filter by sentiment
+    response = client.get('/api/feedback/filter?sentiment=positive')
+    assert response.status_code == 200
+    json_data = response.get_json()
+    assert json_data['success']
+    assert len(json_data['feedbacks']) == 1
+    assert json_data['feedbacks'][0]['sentiment'] == 'positive'
+    
+    # Test filter by company
+    response = client.get('/api/feedback/filter?company=Apple')
+    assert response.status_code == 200
+    json_data = response.get_json()
+    assert json_data['success']
+    assert len(json_data['feedbacks']) == 1
+    assert json_data['feedbacks'][0]['company_name'] == 'Apple'
+    
+    # Test search
+    response = client.get('/api/feedback/filter?search=great')
+    assert response.status_code == 200
+    json_data = response.get_json()
+    assert json_data['success']
+    assert len(json_data['feedbacks']) == 1
+    assert 'Great' in json_data['feedbacks'][0]['comment']

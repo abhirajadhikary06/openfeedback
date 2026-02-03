@@ -90,6 +90,65 @@ def index():
     
     return render_template('index.html', feedbacks=feedbacks, companies=COMPANIES)
 
+@app.route('/api/feedback/filter', methods=['GET'])
+def filter_feedback():
+    """API endpoint to get filtered feedback"""
+    # Get query parameters
+    search = request.args.get('search', '').lower()
+    sentiment = request.args.get('sentiment', '')
+    company = request.args.get('company', '')
+    sort_by = request.args.get('sort', 'recent')
+    
+    # Base query - only show approved feedback unless admin
+    if session.get('is_admin'):
+        query = Feedback.query
+    else:
+        query = Feedback.query.filter_by(status='approved')
+    
+    # Apply filters
+    if search:
+        query = query.filter(
+            db.or_(
+                Feedback.company_name.ilike(f'%{search}%'),
+                Feedback.comment.ilike(f'%{search}%')
+            )
+        )
+    
+    if sentiment:
+        query = query.filter_by(sentiment=sentiment)
+    
+    if company:
+        query = query.filter_by(company_name=company)
+    
+    # Apply sorting
+    if sort_by == 'oldest':
+        query = query.order_by(Feedback.date_created.asc())
+    elif sort_by == 'helpful':
+        # For now, sort by ID as a proxy for helpful (could be extended with actual helpful votes)
+        query = query.order_by(Feedback.id.desc())
+    else:  # recent (default)
+        query = query.order_by(Feedback.date_created.desc())
+    
+    feedbacks = query.all()
+    
+    # Convert to JSON
+    feedback_list = []
+    for feedback in feedbacks:
+        feedback_list.append({
+            'id': feedback.id,
+            'company_name': feedback.company_name,
+            'company_logo': feedback.company_logo,
+            'comment': feedback.comment,
+            'sentiment': feedback.sentiment,
+            'date_created': feedback.date_created.isoformat() if feedback.date_created else None
+        })
+    
+    return jsonify({
+        'success': True,
+        'feedbacks': feedback_list,
+        'total': len(feedback_list)
+    })
+
 @app.route('/submit_feedback', methods=['POST'])
 @login_required  # Now requires login to submit feedback
 def submit_feedback():
