@@ -82,7 +82,7 @@ openfeed/
 
 ## Companies Supported
 
-Google, Apple, Microsoft, Amazon, Netflix, Tesla, Facebook, Twitter, Spotify, and 22 more.
+Google, Apple, Microsoft, Amazon, Netflix, Tesla, Facebook, Twitter, Spotify and 10 more.
 
 ## License
 MIT License
