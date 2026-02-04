@@ -40,6 +40,63 @@ Visit `http://localhost:5000`
 
 - Docker (containerization)
 
+## Architecture Diagram
+
+```mermaid
+flowchart TD
+    A[User/Visitor] -->|Browse| B[Frontend - HTML/CSS/JS]
+    A -->|Register/Login| C[Auth Module]
+    
+    C -->|Authenticate| D[Session Management]
+    D -->|Valid Session| E[User Dashboard]
+    
+    E -->|Submit Feedback| F[Flask Backend]
+    B -->|View Public Feedback| F
+    
+    F -->|Analyze Text| G[Sentiment Analysis Engine]
+    G -->|positive/negative/neutral| F
+    
+    F -->|Save| H[(SQLite Database)]
+    F -->|Retrieve| H
+    
+    H -->|Store| I[User Data]
+    H -->|Store| J[Feedback Data]
+    
+    K[Admin User] -->|Access| L[Admin Dashboard]
+    L -->|Moderate| M[Pending Feedback Queue]
+    M -->|Approve/Reject| H
+    
+    F -->|Filter & Search| N[API Endpoints]
+    N -->|Return JSON| B
+    
+    F -->|Company Logos| O[Static Assets]
+    O -->|Serve Images| B
+    
+    style A fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style K fill:#E24A4A,stroke:#8A2E2E,stroke-width:2px,color:#fff
+    style B fill:#9B59B6,stroke:#6C3483,stroke-width:2px,color:#fff
+    style C fill:#E67E22,stroke:#A04000,stroke-width:2px,color:#fff
+    style D fill:#1ABC9C,stroke:#117A65,stroke-width:2px,color:#fff
+    style E fill:#3498DB,stroke:#21618C,stroke-width:2px,color:#fff
+    style F fill:#E74C3C,stroke:#943126,stroke-width:2px,color:#fff
+    style G fill:#2ECC71,stroke:#1E8449,stroke-width:2px,color:#fff
+    style H fill:#F39C12,stroke:#B9770E,stroke-width:2px,color:#fff
+    style I fill:#16A085,stroke:#0E6655,stroke-width:2px,color:#fff
+    style J fill:#8E44AD,stroke:#5B2C6F,stroke-width:2px,color:#fff
+    style L fill:#C0392B,stroke:#78281F,stroke-width:2px,color:#fff
+    style M fill:#D35400,stroke:#873600,stroke-width:2px,color:#fff
+    style N fill:#27AE60,stroke:#186A3B,stroke-width:2px,color:#fff
+    style O fill:#2980B9,stroke:#1B4F72,stroke-width:2px,color:#fff
+```
+
+**Flow Description:**
+1. **User Registration/Login**: Users authenticate via the auth module with session management
+2. **Feedback Submission**: Logged-in users submit feedback for companies
+3. **Sentiment Analysis**: Text is automatically analyzed for positive/negative/neutral sentiment
+4. **Database Storage**: All data persists in SQLite database
+5. **Admin Moderation**: Admins review and approve/reject pending feedback
+6. **Public Display**: Approved feedback is displayed to all visitors with filtering and search capabilities
+
 ## Project Structure
 
 ```
@@ -83,6 +140,14 @@ openfeed/
 ## Companies Supported
 
 Google, Apple, Microsoft, Amazon, Netflix, Tesla, Facebook, Twitter, Spotify and 10 more.
+
+## Contributors
+
+Thanks to all the amazing contributors who have helped make this project better! 🎉
+
+<a href="https://github.com/rudrabhowmick/openfeedback/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=rudrabhowmick/openfeedback" />
+</a>
 
 ## License
 MIT License
