@@ -220,6 +220,11 @@ class FeedbackManager {
         feedback.element.style.order = index;
         feedbackGrid.appendChild(feedback.element);
       });
+      
+      // Refresh vote controls after reordering
+      if (window.voteManager) {
+        window.voteManager.refreshVoteControls();
+      }
     }
   }
 
@@ -319,6 +324,13 @@ class FeedbackManager {
     const feedbackCard = document.createElement('div');
     feedbackCard.className = 'feedback-box';
     feedbackCard.style.animation = 'modalSlideIn 0.5s ease';
+    feedbackCard.dataset.feedbackId = feedback.id || '';
+    feedbackCard.dataset.userId = feedback.user_id || '';
+
+    // Check if this is the current user's feedback
+    const authState = document.getElementById('auth-state');
+    const currentUserId = authState ? parseInt(authState.dataset.userId) : null;
+    const isOwnFeedback = currentUserId && feedback.user_id && currentUserId === feedback.user_id;
 
     feedbackCard.innerHTML = `
       <div class="feedback-box-header">
@@ -331,6 +343,7 @@ class FeedbackManager {
                 </div>`
           }
           <span class="feedback-company-name">${feedback.company_name}</span>
+          ${isOwnFeedback ? '<span class="you-badge"><i class="fas fa-user"></i> YOU</span>' : ''}
         </div>
         <span class="sentiment-badge ${feedback.sentiment}">
           ${feedback.sentiment.charAt(0).toUpperCase() + feedback.sentiment.slice(1)}
@@ -338,6 +351,7 @@ class FeedbackManager {
       </div>
       <div class="feedback-box-content">
         <p class="feedback-text">"${feedback.comment}"</p>
+        <!-- Vote controls will be inserted here by JavaScript -->
       </div>
     `;
 
