@@ -262,6 +262,97 @@
             font-size: 1rem;
         }
 
+        /* Feedback Vote Section */
+        .feedback-vote-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            border-top: 2px solid var(--gray-700);
+        }
+
+        .vote-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--dark);
+            border: 2px solid var(--gray-700);
+            border-radius: 8px;
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .vote-btn:hover:not(.disabled) {
+            border-color: var(--purple-light);
+            color: var(--white);
+            transform: translateY(-1px);
+        }
+
+        .vote-btn.upvote-btn.active {
+            background: rgba(45, 186, 78, 0.2);
+            border-color: var(--green);
+            color: var(--green);
+        }
+
+        .vote-btn.downvote-btn.active {
+            background: rgba(226, 67, 41, 0.2);
+            border-color: var(--orange-dark);
+            color: var(--orange-dark);
+        }
+
+        .vote-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .vote-btn.disabled:hover {
+            transform: none;
+            border-color: var(--gray-700);
+            color: var(--gray-400);
+        }
+
+        .vote-count {
+            font-weight: 700;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .vote-score {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .score-label {
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        .score-value {
+            font-weight: 700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background: var(--gray-700);
+            color: var(--white);
+        }
+
+        .score-value.positive {
+            background: rgba(45, 186, 78, 0.2);
+            color: var(--green);
+        }
+
+        .score-value.negative {
+            background: rgba(226, 67, 41, 0.2);
+            color: var(--orange-dark);
+        }
+
         /* Feedback Grid */
         .feedback-grid {
             display: grid;
@@ -296,12 +387,15 @@
             margin-bottom: 1.25rem;
             padding-bottom: 1rem;
             border-bottom: 2px solid var(--gray-700);
+            gap: 1rem;
         }
 
         .feedback-company {
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            flex: 1;
+            min-width: 0;
         }
 
         .feedback-company-logo {
@@ -315,6 +409,29 @@
         .feedback-company-name {
             font-weight: 700;
             font-size: 0.95rem;
+            white-space: nowrap;
+        }
+
+        .author-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.2rem 0.4rem;
+            background: rgba(119, 89, 194, 0.15);
+            color: var(--purple-light);
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            margin-left: 0.4rem;
+            border: 1px solid var(--purple);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .author-badge i {
+            font-size: 0.6rem;
         }
 
         .sentiment-badge {
@@ -723,6 +840,34 @@
             .modal-box {
                 margin: 1rem;
             }
+
+            /* Responsive Vote Section */
+            .feedback-vote-section {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .vote-btn {
+                justify-content: center;
+                padding: 0.75rem 1rem;
+            }
+
+            .vote-score {
+                justify-content: center;
+            }
+
+            /* Responsive Author Badge */
+            .author-badge {
+                font-size: 0.65rem;
+                padding: 0.25rem 0.5rem;
+                margin-left: 0.25rem;
+            }
+
+            .feedback-company {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -784,8 +929,9 @@
         </div>
 
         <div class="feedback-grid" id="hofGrid">
-          {% for feedback in feedbacks %}
-          <div class="feedback-box">
+          {% for item in feedback_data %}
+          {% set feedback = item.feedback %}
+          <div class="feedback-box" data-feedback-id="{{ feedback.id }}">
             <div class="feedback-box-header">
               <div class="feedback-company">
                 {% if feedback.company_logo %}
@@ -809,9 +955,15 @@
                   {{ feedback.company_name[0].upper() }}
                 </div>
                 {% endif %}
-                <span class="feedback-company-name"
-                  >{{ feedback.company_name }}</span
-                >
+                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                  <span class="feedback-company-name">{{ feedback.company_name }}</span>
+                  {% if logged_in and feedback.user_id == session.get('user_id') %}
+                    <span class="author-badge">
+                      <i class="fas fa-user"></i>
+                      You
+                    </span>
+                  {% endif %}
+                </div>
               </div>
               <span class="sentiment-badge {{ feedback.sentiment }}"
                 >{{ feedback.sentiment.title() }}</span
@@ -819,6 +971,40 @@
             </div>
             <div class="feedback-box-content">
               <p class="feedback-text">"{{ feedback.comment }}"</p>
+            </div>
+            
+            <!-- Vote Buttons -->
+            <div class="feedback-vote-section">
+              {% if logged_in and item.can_vote %}
+                <button class="vote-btn upvote-btn {% if item.user_vote == 1 %}active{% endif %}" 
+                        data-feedback-id="{{ feedback.id }}" 
+                        data-vote-type="1">
+                  <i class="fas fa-thumbs-up"></i>
+                  <span class="vote-count">{{ feedback.upvote_count }}</span>
+                </button>
+                <button class="vote-btn downvote-btn {% if item.user_vote == -1 %}active{% endif %}" 
+                        data-feedback-id="{{ feedback.id }}" 
+                        data-vote-type="-1">
+                  <i class="fas fa-thumbs-down"></i>
+                  <span class="vote-count">{{ feedback.downvote_count }}</span>
+                </button>
+              {% else %}
+                <button class="vote-btn upvote-btn disabled" title="{% if not logged_in %}Login to vote{% else %}Cannot vote on your own feedback{% endif %}">
+                  <i class="fas fa-thumbs-up"></i>
+                  <span class="vote-count">{{ feedback.upvote_count }}</span>
+                </button>
+                <button class="vote-btn downvote-btn disabled" title="{% if not logged_in %}Login to vote{% else %}Cannot vote on your own feedback{% endif %}">
+                  <i class="fas fa-thumbs-down"></i>
+                  <span class="vote-count">{{ feedback.downvote_count }}</span>
+                </button>
+              {% endif %}
+              
+              <div class="vote-score">
+                <span class="score-label">Score:</span>
+                <span class="score-value {% if feedback.vote_score > 0 %}positive{% elif feedback.vote_score < 0 %}negative{% endif %}">
+                  {{ feedback.vote_score }}
+                </span>
+              </div>
             </div>
           </div>
           {% endfor %}
@@ -991,5 +1177,6 @@
 </body>
 </html>
     <script src="{{ url_for('static', filename='js/feedback.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/voting.js') }}"></script>
   </body>
 </html>

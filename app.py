@@ -50,6 +50,37 @@ class Feedback(db.Model):
     sentiment = db.Column(db.String(20), nullable=False)
     status = db.Column(db.String(20), default='pending')  # pending, approved, rejected
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationship with votes
+    votes = db.relationship('Vote', backref='feedback', lazy=True, cascade='all, delete-orphan')
+    
+    @property
+    def vote_score(self):
+        """Calculate net vote score (upvotes - downvotes)"""
+        upvotes = sum(1 for vote in self.votes if vote.vote_type == 1)
+        downvotes = sum(1 for vote in self.votes if vote.vote_type == -1)
+        return upvotes - downvotes
+    
+    @property
+    def upvote_count(self):
+        """Get total upvotes"""
+        return sum(1 for vote in self.votes if vote.vote_type == 1)
+    
+    @property
+    def downvote_count(self):
+        """Get total downvotes"""
+        return sum(1 for vote in self.votes if vote.vote_type == -1)
+
+# Vote model for feedback voting
+class Vote(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    feedback_id = db.Column(db.Integer, db.ForeignKey('feedback.id'), nullable=False)
+    vote_type = db.Column(db.Integer, nullable=False)  # 1 for upvote, -1 for downvote
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Ensure one vote per user per feedback
+    __table_args__ = (db.UniqueConstraint('user_id', 'feedback_id', name='unique_user_feedback_vote'),)
 
 def get_company_logo(company_name):
     """Get company logo from static folder"""
@@ -88,7 +119,156 @@ def index():
     else:
         feedbacks = Feedback.query.filter_by(status='approved').order_by(Feedback.date_created.desc()).all()
     
-    return render_template('index.html', feedbacks=feedbacks, companies=COMPANIES)
+    # Add vote data for each feedback
+    feedback_data = []
+    for feedback in feedbacks:
+        user_vote = None
+        if session.get('user_id'):
+            vote = Vote.query.filter_by(user_id=session.get('user_id'), feedback_id=feedback.id).first()
+            user_vote = vote.vote_type if vote else None
+        
+        feedback_data.append({
+            'feedback': feedback,
+            'user_vote': user_vote,
+            'can_vote': session.get('user_id') and feedback.user_id != session.get('user_id')
+        })
+    
+    return render_template('index.html', feedback_data=feedback_data, companies=COMPANIES)
+
+@app.route('/api/vote', methods=['POST'])
+@login_required
+def vote_feedback():
+    """Vote on feedback (upvote/downvote)"""
+    data = request.json
+    feedback_id = data.get('feedback_id')
+    vote_type = data.get('vote_type')  # 1 for upvote, -1 for downvote
+    
+    if not feedback_id or vote_type not in [1, -1]:
+        return jsonify({'success': False, 'message': 'Invalid vote data'}), 400
+    
+    # Check if feedback exists
+    feedback = Feedback.query.get(feedback_id)
+    if not feedback:
+        return jsonify({'success': False, 'message': 'Feedback not found'}), 404
+    
+    # Prevent voting on own feedback
+    if feedback.user_id == session.get('user_id'):
+        return jsonify({'success': False, 'message': 'Cannot vote on your own feedback'}), 403
+    
+    user_id = session.get('user_id')
+    
+    # Check if user already voted
+    existing_vote = Vote.query.filter_by(user_id=user_id, feedback_id=feedback_id).first()
+    
+    if existing_vote:
+        if existing_vote.vote_type == vote_type:
+            # Same vote - remove it (toggle off)
+            db.session.delete(existing_vote)
+            action = 'removed'
+        else:
+            # Different vote - update it
+            existing_vote.vote_type = vote_type
+            action = 'updated'
+    else:
+        # New vote
+        new_vote = Vote(user_id=user_id, feedback_id=feedback_id, vote_type=vote_type)
+        db.session.add(new_vote)
+        action = 'added'
+    
+    db.session.commit()
+    
+    # Get updated vote counts
+    feedback = Feedback.query.get(feedback_id)  # Refresh to get updated counts
+    
+    return jsonify({
+        'success': True,
+        'action': action,
+        'vote_score': feedback.vote_score,
+        'upvote_count': feedback.upvote_count,
+        'downvote_count': feedback.downvote_count
+    })
+
+@app.route('/api/vote/status/<int:feedback_id>', methods=['GET'])
+@login_required
+def get_vote_status(feedback_id):
+    """Get user's vote status for a feedback"""
+    user_id = session.get('user_id')
+    vote = Vote.query.filter_by(user_id=user_id, feedback_id=feedback_id).first()
+    
+    return jsonify({
+        'success': True,
+        'vote_type': vote.vote_type if vote else None
+    })
+
+@app.route('/api/feedback/filter', methods=['GET'])
+def filter_feedback():
+    """API endpoint to get filtered feedback with vote data"""
+    # Get query parameters
+    search = request.args.get('search', '').lower()
+    sentiment = request.args.get('sentiment', '')
+    company = request.args.get('company', '')
+    sort_by = request.args.get('sort', 'recent')
+    
+    # Base query - only show approved feedback unless admin
+    if session.get('is_admin'):
+        query = Feedback.query
+    else:
+        query = Feedback.query.filter_by(status='approved')
+    
+    # Apply filters
+    if search:
+        query = query.filter(
+            db.or_(
+                Feedback.company_name.ilike(f'%{search}%'),
+                Feedback.comment.ilike(f'%{search}%')
+            )
+        )
+    
+    if sentiment:
+        query = query.filter_by(sentiment=sentiment)
+    
+    if company:
+        query = query.filter_by(company_name=company)
+    
+    # Apply sorting
+    if sort_by == 'oldest':
+        query = query.order_by(Feedback.date_created.asc())
+        feedbacks = query.all()
+    elif sort_by == 'helpful':
+        # Sort by vote score (most helpful first)
+        feedbacks = query.all()
+        feedbacks.sort(key=lambda f: f.vote_score, reverse=True)
+    else:  # recent (default)
+        query = query.order_by(Feedback.date_created.desc())
+        feedbacks = query.all()
+    
+    # Convert to JSON
+    feedback_list = []
+    for feedback in feedbacks:
+        user_vote = None
+        if session.get('user_id'):
+            vote = Vote.query.filter_by(user_id=session.get('user_id'), feedback_id=feedback.id).first()
+            user_vote = vote.vote_type if vote else None
+            
+        feedback_list.append({
+            'id': feedback.id,
+            'company_name': feedback.company_name,
+            'company_logo': feedback.company_logo,
+            'comment': feedback.comment,
+            'sentiment': feedback.sentiment,
+            'date_created': feedback.date_created.isoformat() if feedback.date_created else None,
+            'vote_score': feedback.vote_score,
+            'upvote_count': feedback.upvote_count,
+            'downvote_count': feedback.downvote_count,
+            'user_vote': user_vote,
+            'can_vote': session.get('user_id') and feedback.user_id != session.get('user_id')
+        })
+    
+    return jsonify({
+        'success': True,
+        'feedbacks': feedback_list,
+        'total': len(feedback_list)
+    })
 
 @app.route('/submit_feedback', methods=['POST'])
 @login_required  # Now requires login to submit feedback
@@ -110,7 +290,7 @@ def submit_feedback():
         company_logo=logo,
         comment=comment,
         sentiment=sentiment,
-        status='pending'  # Set to pending for moderation
+        status='approved'  # Auto-approve for testing
     )
     db.session.add(feedback)
     db.session.commit()

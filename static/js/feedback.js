@@ -74,6 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Create the new feedback card HTML
     const feedbackCard = document.createElement("div");
     feedbackCard.className = "feedback-box";
+    feedbackCard.setAttribute("data-feedback-id", feedback.id);
     feedbackCard.style.animation = "modalSlideIn 0.5s ease";
 
     feedbackCard.innerHTML = `
@@ -94,6 +95,20 @@ document.addEventListener("DOMContentLoaded", function () {
       </div>
       <div class="feedback-box-content">
         <p class="feedback-text">"${feedback.comment}"</p>
+      </div>
+      <div class="feedback-vote-section">
+        <button class="vote-btn upvote-btn disabled" title="Cannot vote on your own feedback">
+          <i class="fas fa-thumbs-up"></i>
+          <span class="vote-count">0</span>
+        </button>
+        <button class="vote-btn downvote-btn disabled" title="Cannot vote on your own feedback">
+          <i class="fas fa-thumbs-down"></i>
+          <span class="vote-count">0</span>
+        </button>
+        <div class="vote-score">
+          <span class="score-label">Score:</span>
+          <span class="score-value">0</span>
+        </div>
       </div>
     `;
 
