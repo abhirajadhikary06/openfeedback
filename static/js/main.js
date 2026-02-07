@@ -100,3 +100,24 @@ document.addEventListener("keydown", (e) => {
 })
 
 console.log("[v0] Openfeed UI initialized successfully")
+
+document.addEventListener("DOMContentLoaded", function () {
+  const toggleBtn = document.getElementById("theme-toggle");
+
+  // Load saved theme
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "light") {
+    document.body.classList.add("light-theme");
+  }
+
+  toggleBtn.addEventListener("click", function () {
+    document.body.classList.toggle("light-theme");
+
+    // Save preference
+    if (document.body.classList.contains("light-theme")) {
+      localStorage.setItem("theme", "light");
+    } else {
+      localStorage.setItem("theme", "dark");
+    }
+  });
+});

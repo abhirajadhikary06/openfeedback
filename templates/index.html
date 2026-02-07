@@ -1,11 +1,6 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <link
-      rel="icon"
-      href="{{ url_for('static', filename='assets/openfeed.ico') }}"
-      type="image/x-icon"
-    />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Openfeed</title>
@@ -1216,6 +1211,11 @@
       href="{{ url_for('static', filename='css/main.css') }}"
       rel="stylesheet"
     />
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='assets/openfeed.ico') }}"
+      type="image/x-icon"
+    />
   </head>
   <body>
     <!-- Floating Center Navbar -->
@@ -1225,10 +1225,20 @@
           <span class="brand-icon"><i class="fas fa-bolt"></i></span>
           <span class="brand-text">openfeed..</span>
         </div>
-        <button class="feedback-trigger-btn" id="feedbackBtn">
-          <i class="fas fa-plus"></i>
-          <span>Share Feedback</span>
-        </button>
+
+        <!-- Right side buttons -->
+        <div style="display: flex; gap: 10px; align-items: center">
+          <!-- Theme Toggle Button -->
+          <button id="theme-toggle" class="feedback-trigger-btn">
+            <i class="fas fa-moon"></i>
+          </button>
+
+          <!-- Feedback Button -->
+          <button class="feedback-trigger-btn" id="feedbackBtn">
+            <i class="fas fa-plus"></i>
+            <span>Share Feedback</span>
+          </button>
+        </div>
       </div>
     </nav>
 
@@ -1256,13 +1266,17 @@
           <div class="search-container">
             <div class="search-input-wrapper">
               <i class="fas fa-search search-icon"></i>
-              <input 
-                type="text" 
-                id="searchInput" 
-                class="search-input" 
+              <input
+                type="text"
+                id="searchInput"
+                class="search-input"
                 placeholder="Search feedback by company or content..."
+              />
+              <button
+                id="clearSearch"
+                class="clear-search-btn"
+                style="display: none"
               >
-              <button id="clearSearch" class="clear-search-btn" style="display: none;">
                 <i class="fas fa-times"></i>
               </button>
             </div>
@@ -1274,7 +1288,7 @@
           </div>
 
           <!-- Collapsible Filters and Sort Row -->
-          <div class="controls-row" id="filtersRow" style="display: none;">
+          <div class="controls-row" id="filtersRow" style="display: none">
             <!-- Sentiment Filter -->
             <div class="filter-group">
               <label class="filter-label">
@@ -1325,7 +1339,9 @@
 
           <!-- Results Info -->
           <div class="results-info">
-            <span id="resultsCount">{{ feedbacks|length }} feedback(s) found</span>
+            <span id="resultsCount"
+              >{{ feedbacks|length }} feedback(s) found</span
+            >
           </div>
         </div>
 
@@ -1437,112 +1453,123 @@
     </div>
 
     <footer class="site-footer">
-        <div class="footer-container">
-            <div class="footer-brand">
-                <div class="navbar-brand" style="margin-bottom: 1.5rem;">
-                    <span class="brand-icon"><i class="fas fa-bolt"></i></span>
-                    <span class="brand-text">openfeed..</span>
-                </div>
-                <p class="footer-tagline">"OpenFeedback - Share Your Voice, Shape the Future"</p>
-                <p class="footer-desc">A community-driven platform dedicated to transparency and improving services through honest feedback.</p>
-            </div>
-
-            <div>
-                <h4 class="footer-heading">Quick Links</h4>
-                <ul class="footer-links">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="#hofGrid">Hall of Fame</a></li>
-                    <li><a href="javascript:void(0)" onclick="document.getElementById('feedbackBtn').click()">Submit Feedback</a></li>
-                    <li><a href="#">About Us</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="footer-heading">Legal & Info</h4>
-                <ul class="footer-links">
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="footer-heading">Connect</h4>
-                <div class="footer-socials">
-                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-            </div>
+      <div class="footer-container">
+        <div class="footer-brand">
+          <div class="navbar-brand" style="margin-bottom: 1.5rem">
+            <span class="brand-icon"><i class="fas fa-bolt"></i></span>
+            <span class="brand-text">openfeed..</span>
+          </div>
+          <p class="footer-tagline">
+            "OpenFeedback - Share Your Voice, Shape the Future"
+          </p>
+          <p class="footer-desc">
+            A community-driven platform dedicated to transparency and improving
+            services through honest feedback.
+          </p>
         </div>
 
-        <div class="footer-bottom">
-            <p>&copy; 2026 OpenFeedback. All rights reserved.</p>
+        <div>
+          <h4 class="footer-heading">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="#hofGrid">Hall of Fame</a></li>
+            <li>
+              <a
+                href="javascript:void(0)"
+                onclick="document.getElementById('feedbackBtn').click()"
+                >Submit Feedback</a
+              >
+            </li>
+            <li><a href="#">About Us</a></li>
+          </ul>
         </div>
+
+        <div>
+          <h4 class="footer-heading">Legal & Info</h4>
+          <ul class="footer-links">
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-heading">Connect</h4>
+          <div class="footer-socials">
+            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"
+              ><i class="fab fa-linkedin-in"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 OpenFeedback. All rights reserved.</p>
+      </div>
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Feedback modal functionality
-            const feedbackBtn = document.getElementById('feedbackBtn');
-            const feedbackOverlay = document.getElementById('feedbackOverlay');
-            const closeFeedback = document.getElementById('closeFeedback');
-            const feedbackForm = document.getElementById('feedbackForm');
-            
-            // Open feedback modal
-            feedbackBtn.addEventListener('click', function() {
-                feedbackOverlay.classList.add('active');
-            });
-            
-            // Close feedback modal
-            closeFeedback.addEventListener('click', function() {
-                feedbackOverlay.classList.remove('active');
-            });
-            
-            // Close modal when clicking outside
-            feedbackOverlay.addEventListener('click', function(e) {
-                if (e.target === feedbackOverlay) {
-                    feedbackOverlay.classList.remove('active');
-                }
-            });
-            
-            // Form submission
-            feedbackForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const formData = new FormData(feedbackForm);
-                const data = {
-                    company: formData.get('company'),
-                    comment: formData.get('comment')
-                };
-                
-                fetch('/submit_feedback', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Feedback submitted successfully!');
-                        feedbackForm.reset();
-                        feedbackOverlay.classList.remove('active');
-                        // Optionally reload the page to show the new feedback
-                        // window.location.reload();
-                    } else {
-                        alert('Error submitting feedback: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred while submitting your feedback.');
-                });
+      document.addEventListener("DOMContentLoaded", function () {
+        // Feedback modal functionality
+        const feedbackBtn = document.getElementById("feedbackBtn");
+        const feedbackOverlay = document.getElementById("feedbackOverlay");
+        const closeFeedback = document.getElementById("closeFeedback");
+        const feedbackForm = document.getElementById("feedbackForm");
+
+        // Open feedback modal
+        feedbackBtn.addEventListener("click", function () {
+          feedbackOverlay.classList.add("active");
+        });
+
+        // Close feedback modal
+        closeFeedback.addEventListener("click", function () {
+          feedbackOverlay.classList.remove("active");
+        });
+
+        // Close modal when clicking outside
+        feedbackOverlay.addEventListener("click", function (e) {
+          if (e.target === feedbackOverlay) {
+            feedbackOverlay.classList.remove("active");
+          }
+        });
+
+        // Form submission
+        feedbackForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const formData = new FormData(feedbackForm);
+          const data = {
+            company: formData.get("company"),
+            comment: formData.get("comment"),
+          };
+
+          fetch("/submit_feedback", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                alert("Feedback submitted successfully!");
+                feedbackForm.reset();
+                feedbackOverlay.classList.remove("active");
+                // Optionally reload the page to show the new feedback
+                // window.location.reload();
+              } else {
+                alert("Error submitting feedback: " + data.message);
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert("An error occurred while submitting your feedback.");
             });
         });
+      });
     </script>
-</body>
-</html>
     <script src="{{ url_for('static', filename='js/feedback.js') }}"></script>
     <script src="{{ url_for('static', filename='js/search-filter.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vote-manager.js') }}"></script>
