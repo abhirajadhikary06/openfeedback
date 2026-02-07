@@ -110,6 +110,104 @@
             box-shadow: 3px 3px 0px 0px var(--white);
         }
 
+        /* Navbar Actions Container */
+        .navbar-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        /* Auth Buttons (Login/Signup) */
+        .auth-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-family: inherit;
+            border: 2px solid;
+        }
+
+        .login-btn {
+            background: transparent;
+            color: var(--white);
+            border-color: var(--white);
+        }
+
+        .login-btn:hover {
+            background: var(--white);
+            color: var(--dark);
+            transform: translateY(-2px);
+        }
+
+        .signup-btn {
+            background: var(--purple);
+            color: var(--white);
+            border-color: var(--purple-light);
+            box-shadow: 3px 3px 0px 0px var(--purple-light);
+        }
+
+        .signup-btn:hover {
+            background: var(--purple-light);
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0px 0px var(--purple-light);
+        }
+
+        .signup-btn:active {
+            transform: translate(0, 0);
+            box-shadow: 2px 2px 0px 0px var(--purple-light);
+        }
+
+        /* User Menu (Authenticated) */
+        .user-greeting {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: var(--darker);
+            border: 2px solid var(--purple);
+            border-radius: 10px;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-greeting i {
+            font-size: 1.1rem;
+            color: var(--purple-light);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: var(--orange-dark);
+            color: var(--white);
+            border: 2px solid var(--orange);
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .logout-btn:hover {
+            background: var(--orange);
+            transform: translateY(-2px);
+        }
+
+        .logout-btn:active {
+            transform: translateY(0);
+        }
+
         /* Main Container */
         .main-container {
             max-width: 1200px;
@@ -1123,6 +1221,33 @@
                 gap: 1rem;
             }
 
+            .navbar-actions {
+                flex-direction: column;
+                width: 100%;
+                gap: 0.75rem;
+            }
+
+            .auth-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 0.875rem 1.5rem;
+            }
+
+            .user-greeting {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .logout-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .feedback-trigger-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
             .main-container {
                 padding: 10rem 1.5rem 3rem;
             }
@@ -1227,16 +1352,38 @@
         </div>
 
         <!-- Right side buttons -->
-        <div style="display: flex; gap: 10px; align-items: center">
-          <!-- Theme Toggle Button -->
-          <button id="theme-toggle" class="feedback-trigger-btn">
-            <i class="fas fa-moon"></i>
-          </button>
+        <div class="navbar-actions">
+          {% if logged_in %}
+            <!-- Authenticated User Menu -->
+            <span class="user-greeting">
+              <i class="fas fa-user-circle"></i>
+              <span>{{ current_user }}</span>
+            </span>
+            <button onclick="confirmLogout()" class="logout-btn">
+              <i class="fas fa-sign-out-alt"></i>
+              <span>Logout</span>
+            </button>
+          {% else %}
+            <!-- Guest User Buttons -->
+            <a href="{{ url_for('auth.register') }}" class="auth-btn signup-btn">
+              <i class="fas fa-user-plus"></i>
+              <span>Sign Up</span>
+            </a>
+            <a href="{{ url_for('auth.login') }}" class="auth-btn login-btn">
+              <i class="fas fa-sign-in-alt"></i>
+              <span>Login</span>
+            </a>
+          {% endif %}
 
           <!-- Feedback Button -->
           <button class="feedback-trigger-btn" id="feedbackBtn">
             <i class="fas fa-plus"></i>
             <span>Share Feedback</span>
+          </button>
+
+          <!-- Theme Toggle Button -->
+          <button id="theme-toggle" class="feedback-trigger-btn">
+            <i class="fas fa-moon"></i>
           </button>
         </div>
       </div>
@@ -1569,6 +1716,13 @@
             });
         });
       });
+
+      // Logout confirmation function
+      function confirmLogout() {
+        if (confirm("Are you sure you want to logout?")) {
+          window.location.href = "{{ url_for('auth.logout') }}";
+        }
+      }
     </script>
     <script src="{{ url_for('static', filename='js/feedback.js') }}"></script>
     <script src="{{ url_for('static', filename='js/search-filter.js') }}"></script>
