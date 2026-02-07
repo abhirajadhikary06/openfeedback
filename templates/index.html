@@ -883,7 +883,7 @@
             width: 100%;
             position: relative;
         }
-        
+
         .company-select {
             width: 100%;
             padding: 1.25rem;
@@ -899,13 +899,13 @@
             -webkit-appearance: none;
             -moz-appearance: none;
         }
-        
+
         .company-select:focus {
             outline: none;
             border-color: var(--purple);
             box-shadow: 0 0 0 3px var(--darker), 0 0 15px rgba(169, 137, 245, 0.3);
         }
-        
+
         .company-dropdown::after {
             content: '\f107';
             font-family: 'Font Awesome 5 Free';
@@ -917,23 +917,61 @@
             color: var(--gray-400);
             pointer-events: none;
         }
-        
+
         .company-option {
             display: flex;
             align-items: center;
             gap: 0.75rem;
             padding: 0.5rem;
         }
-        
+
         .company-option-logo {
             width: 24px;
             height: 24px;
             border-radius: 4px;
             object-fit: cover;
         }
-        
+
         .company-option-name {
             font-weight: 500;
+        }
+
+        /* Custom Company Input (appears when "Other" is selected) */
+        .custom-company-wrapper {
+            display: none;
+            margin-top: 1rem;
+            animation: slideDown 0.25s ease;
+        }
+
+        .custom-company-wrapper.visible {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .custom-company-input {
+            width: 100%;
+            padding: 1.25rem;
+            background: var(--dark);
+            border: 3px solid var(--gray-700);
+            border-radius: 12px;
+            color: var(--white);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .custom-company-input:focus {
+            outline: none;
+            border-color: var(--orange);
+            box-shadow: 0 0 0 3px var(--darker), 0 0 15px rgba(252, 109, 38, 0.3);
+        }
+
+        .custom-company-input::placeholder {
+            color: var(--gray-400);
         }
 
         /* Textarea */
@@ -1417,7 +1455,7 @@
               <span>Select a Company</span>
             </label>
             <div class="company-dropdown">
-              <select class="company-select" name="company" required>
+              <select class="company-select" name="company" id="companySelect" required>
                 <option value="" disabled selected>Choose a company...</option>
                 {% for company in companies %}
                 <option
@@ -1427,7 +1465,20 @@
                   {{ company.name }}
                 </option>
                 {% endfor %}
+                <option value="__other__">Other (type your own)</option>
               </select>
+            </div>
+
+            <!-- Custom company name input (visible when "Other" is chosen) -->
+            <div class="custom-company-wrapper" id="customCompanyWrapper">
+              <input
+                type="text"
+                id="customCompanyInput"
+                class="custom-company-input"
+                placeholder="Enter Company Name..."
+                maxlength="60"
+                autocomplete="organization"
+              />
             </div>
           </div>
 
@@ -1535,12 +1586,40 @@
           }
         });
 
+        // ---- "Other" company toggle logic ----
+        const companySelect = document.getElementById("companySelect");
+        const customCompanyWrapper = document.getElementById("customCompanyWrapper");
+        const customCompanyInput = document.getElementById("customCompanyInput");
+
+        companySelect.addEventListener("change", function () {
+          if (companySelect.value === "__other__") {
+            customCompanyWrapper.classList.add("visible");
+            customCompanyInput.setAttribute("required", "required");
+            customCompanyInput.focus();
+          } else {
+            customCompanyWrapper.classList.remove("visible");
+            customCompanyInput.removeAttribute("required");
+            customCompanyInput.value = "";
+          }
+        });
+
         // Form submission
         feedbackForm.addEventListener("submit", function (e) {
           e.preventDefault();
           const formData = new FormData(feedbackForm);
+          let company = formData.get("company");
+
+          // If "Other" was selected, use the custom input value
+          if (company === "__other__") {
+            company = customCompanyInput.value.trim();
+            if (!company) {
+              customCompanyInput.focus();
+              return;
+            }
+          }
+
           const data = {
-            company: formData.get("company"),
+            company: company,
             comment: formData.get("comment"),
           };
 
@@ -1556,9 +1635,10 @@
               if (data.success) {
                 alert("Feedback submitted successfully!");
                 feedbackForm.reset();
+                // Also hide the custom input on reset
+                customCompanyWrapper.classList.remove("visible");
+                customCompanyInput.removeAttribute("required");
                 feedbackOverlay.classList.remove("active");
-                // Optionally reload the page to show the new feedback
-                // window.location.reload();
               } else {
                 alert("Error submitting feedback: " + data.message);
               }
@@ -1573,7 +1653,7 @@
     <script src="{{ url_for('static', filename='js/feedback.js') }}"></script>
     <script src="{{ url_for('static', filename='js/search-filter.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vote-manager.js') }}"></script>
-    
+
     <!-- Hidden element to pass authentication state to JavaScript -->
     <div id="auth-state" data-logged-in="{{ 'true' if logged_in else 'false' }}" data-user-id="{{ user.id if user else '' }}" style="display: none;"></div>
   </body>
