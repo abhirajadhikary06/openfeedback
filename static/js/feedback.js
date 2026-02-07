@@ -12,6 +12,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Open feedback modal
   feedbackBtn.addEventListener("click", function () {
+    // Check if user is authenticated
+    const authState = document.getElementById('auth-state');
+    const isLoggedIn = authState && authState.dataset.loggedIn === 'true';
+    
+    if (!isLoggedIn) {
+      // Show alert and redirect to login
+      if (confirm("Please login to share feedback. Click OK to go to the login page.")) {
+        window.location.href = '/auth/login';
+      }
+      return;
+    }
+    
+    // User is authenticated, open modal
     feedbackOverlay.classList.add("active");
   });
 
