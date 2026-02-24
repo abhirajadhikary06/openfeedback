@@ -1363,6 +1363,8 @@
                 grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             }
         }
+
+        /* Light theme overrides are in main.css */
     </style>
 </head>
 <body>
@@ -1586,7 +1588,7 @@
         <div class="modal-header">
           <h3>Share Your Feedback</h3>
           <button class="modal-close" id="closeFeedback">
-            <i class="fa-solid fa-xmark" style="color: #ffffff"></i>
+            <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
 
@@ -1807,6 +1809,7 @@
     <script src="{{ url_for('static', filename='js/feedback.js') }}"></script>
     <script src="{{ url_for('static', filename='js/search-filter.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vote-manager.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
 
     <!-- Hidden element to pass authentication state to JavaScript -->
     <div id="auth-state" data-logged-in="{{ 'true' if logged_in else 'false' }}" data-user-id="{{ user.id if user else '' }}" style="display: none;"></div>
