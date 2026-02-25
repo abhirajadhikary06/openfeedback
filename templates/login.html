@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -198,6 +198,7 @@
                 <h1><i class="fas fa-sign-in-alt"></i> Login</h1>
                 <p>Sign in to your account</p>
             </div>
+          </div>
 
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -229,6 +230,7 @@
                 <p><a href="{{ url_for('index') }}">Back to Home</a></p>
             </div>
         </div>
+      </div>
     </div>
 
     <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
