@@ -464,14 +464,437 @@ body {
   box-shadow: 4px 4px 0px 0px var(--white);
 }
 
+/* ========================================
+   LIGHT THEME - Comprehensive Overrides
+   ======================================== */
 body.light-theme {
-  --dark: #ffffff;
+  --dark: #f5f5f5;
   --darker: #ffffff;
   --white: #1a1a1a;
-
-  --gray-700: #e5e5e5;
-  --gray-400: #666666;
+  --gray-100: #1a1a1a;
+  --gray-200: #333333;
   --gray-300: #444444;
+  --gray-400: #666666;
+  --gray-700: #d4d4d4;
+}
+
+/* Navbar */
+body.light-theme .navbar-content {
+  box-shadow:
+    0 0 0 3px var(--darker),
+    0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .brand-text {
+  color: var(--white);
+}
+
+/* Buttons on accent backgrounds - keep text white */
+body.light-theme .feedback-trigger-btn {
+  color: #ffffff;
+  border-color: var(--orange-dark);
+  box-shadow: 5px 5px 0px 0px var(--orange-light);
+}
+
+body.light-theme .feedback-trigger-btn:hover {
+  background: var(--orange-light);
+  color: var(--orange-dark);
+  box-shadow: 7px 7px 0px 0px var(--orange);
+}
+
+body.light-theme .feedback-trigger-btn:active {
+  box-shadow: 3px 3px 0px 0px var(--orange);
+}
+
+body.light-theme .submit-btn {
+  color: #ffffff;
+  border-color: var(--orange-dark);
+  box-shadow: 6px 6px 0px 0px var(--orange-light);
+}
+
+body.light-theme .submit-btn:hover {
+  color: #ffffff;
+  box-shadow: 8px 8px 0px 0px var(--orange-light);
+}
+
+body.light-theme .submit-btn:active {
+  box-shadow: 4px 4px 0px 0px var(--orange-light);
+}
+
+/* Cards and boxes */
+body.light-theme .feedback-box {
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.1);
+  border-color: var(--orange);
+}
+
+body.light-theme .feedback-box:hover {
+  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.12);
+  border-color: var(--orange-light);
+}
+
+body.light-theme .company-box {
+  box-shadow: 4px 4px 0px 0px rgba(119, 89, 194, 0.25);
+}
+
+body.light-theme .company-box:hover {
+  box-shadow: 6px 6px 0px 0px rgba(119, 89, 194, 0.3);
+}
+
+body.light-theme .feedback-controls {
+  box-shadow: 4px 4px 0px 0px rgba(119, 89, 194, 0.25);
+}
+
+body.light-theme .status-box {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+body.light-theme .modal-box {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  border-color: var(--orange);
+}
+
+/* Modal overlay */
+body.light-theme .modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Modal close button */
+body.light-theme .modal-close {
+  background: var(--gray-700);
+  border-color: #bbb;
+  color: var(--white);
+}
+
+body.light-theme .modal-close:hover {
+  background: var(--orange-dark);
+  color: #ffffff;
+}
+
+/* Filter toggle button */
+body.light-theme .filter-toggle-btn {
+  color: #ffffff;
+  border-color: var(--purple-light);
+  box-shadow: 4px 4px 0px 0px rgba(119, 89, 194, 0.25);
+}
+
+body.light-theme .filter-toggle-btn:hover {
+  color: #ffffff;
+}
+
+body.light-theme .filter-toggle-btn.active {
+  color: #ffffff;
+}
+
+body.light-theme .filter-toggle-btn.has-active-filters {
+  color: #ffffff;
+}
+
+/* Form elements */
+body.light-theme .company-select,
+body.light-theme .filter-select,
+body.light-theme .search-input,
+body.light-theme .feedback-textarea {
+  background: var(--dark);
+  color: var(--white);
+  border-color: var(--gray-700);
+}
+
+body.light-theme .company-select:focus,
+body.light-theme .filter-select:focus,
+body.light-theme .search-input:focus {
+  border-color: var(--orange);
+}
+
+body.light-theme .feedback-textarea:focus {
+  border-color: var(--orange);
+}
+
+/* Clear filters button */
+body.light-theme .clear-filters-btn {
+  background: var(--gray-700);
+  color: var(--white);
+  border-color: #bbb;
+}
+
+body.light-theme .clear-filters-btn:hover {
+  background: var(--orange-dark);
+  color: #ffffff;
+  border-color: var(--orange);
+}
+
+/* Social links */
+body.light-theme .social-link {
+  box-shadow: 3px 3px 0px 0px var(--gray-700);
+}
+
+body.light-theme .social-link:hover {
+  box-shadow: 5px 5px 0px 0px var(--orange);
+}
+
+/* Auth buttons */
+body.light-theme .login-btn {
+  color: var(--orange);
+  border-color: var(--orange);
+  background: transparent;
+}
+
+body.light-theme .login-btn:hover {
+  background: var(--orange);
+  color: #ffffff;
+}
+
+body.light-theme .signup-btn {
+  color: #ffffff;
+}
+
+body.light-theme .signup-btn:hover {
+  color: #ffffff;
+}
+
+body.light-theme .logout-btn {
+  color: #ffffff;
+}
+
+body.light-theme .logout-btn:hover {
+  color: #ffffff;
+}
+
+body.light-theme .user-greeting {
+  background: var(--dark);
+  border-color: var(--purple);
+}
+
+/* Sentiment badges - keep their distinct colors */
+body.light-theme .sentiment-badge.positive {
+  background: rgba(45, 186, 78, 0.12);
+  color: #1a8a3a;
+  border-color: #1a8a3a;
+}
+
+body.light-theme .sentiment-badge.negative {
+  background: rgba(226, 67, 41, 0.12);
+  color: #c0392b;
+  border-color: #c0392b;
+}
+
+body.light-theme .sentiment-badge.neutral {
+  background: rgba(163, 163, 163, 0.15);
+  color: #666666;
+  border-color: #999999;
+}
+
+/* Footer */
+body.light-theme .site-footer {
+  background: var(--darker);
+  border-top-color: var(--orange);
+}
+
+body.light-theme .footer-heading {
+  color: var(--white);
+}
+
+body.light-theme .footer-links a {
+  color: var(--gray-400);
+}
+
+body.light-theme .footer-links a:hover {
+  color: var(--purple);
+}
+
+/* Form label */
+body.light-theme .form-label {
+  color: var(--white);
+}
+
+body.light-theme .form-label i {
+  color: var(--purple);
+}
+
+/* Theme toggle button specific styling */
+#theme-toggle {
+  min-width: 44px;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#theme-toggle i {
+  font-size: 1.1rem;
+}
+
+body.light-theme #theme-toggle {
+  background: var(--purple);
+  border-color: var(--purple-light);
+  color: #ffffff;
+  box-shadow: 3px 3px 0px 0px var(--purple-light);
+}
+
+body.light-theme #theme-toggle:hover {
+  background: var(--purple-light);
+  color: #ffffff;
+}
+
+/* ---- Auth Pages (Login/Register/Profile) Light Theme ---- */
+body.light-theme .auth-page-container {
+  background: var(--dark);
+}
+
+body.light-theme .auth-card {
+  background: var(--darker);
+  border-color: var(--orange);
+  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .auth-card:hover {
+  box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .auth-card h1,
+body.light-theme .auth-card h2 {
+  color: var(--white);
+}
+
+body.light-theme .auth-card p {
+  color: var(--gray-400);
+}
+
+body.light-theme .auth-card label {
+  color: var(--white);
+}
+
+body.light-theme .auth-card input {
+  background: var(--dark);
+  color: var(--white);
+  border-color: var(--gray-700);
+}
+
+body.light-theme .auth-card input:focus {
+  border-color: var(--orange);
+}
+
+body.light-theme .auth-card .btn-submit {
+  background: var(--orange);
+  color: #ffffff;
+  border-color: var(--orange-dark);
+  box-shadow: 5px 5px 0px 0px var(--orange-light);
+}
+
+body.light-theme .auth-card .btn-submit:hover {
+  background: var(--orange-light);
+  box-shadow: 7px 7px 0px 0px var(--orange);
+}
+
+body.light-theme .auth-card .auth-links a {
+  color: var(--orange);
+}
+
+body.light-theme .auth-card .auth-links a:hover {
+  color: var(--orange-dark);
+}
+
+/* Profile page light theme */
+body.light-theme .profile-card {
+  background: var(--darker);
+  border-color: var(--orange);
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .profile-card h1,
+body.light-theme .profile-card h2 {
+  color: var(--white);
+}
+
+body.light-theme .profile-card p {
+  color: var(--gray-400);
+}
+
+body.light-theme .profile-feedback-item {
+  background: var(--dark);
+  border-color: var(--gray-700);
+}
+
+body.light-theme .profile-feedback-item:hover {
+  border-color: var(--orange);
+}
+
+body.light-theme .profile-feedback-item h3 {
+  color: var(--white);
+}
+
+body.light-theme .profile-feedback-item p {
+  color: var(--gray-400);
+}
+
+/* About page specific - cards in light theme */
+body.light-theme .mission-card {
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .feature-card {
+  box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .feature-card:hover {
+  box-shadow: 5px 5px 0px 0px rgba(0, 0, 0, 0.12);
+}
+
+body.light-theme .stat-card {
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .stat-card:hover {
+  box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 0.12);
+}
+
+body.light-theme .step-card:hover {
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .step-number {
+  color: #ffffff;
+}
+
+body.light-theme .oss-cta {
+  box-shadow: 4px 4px 0px 0px rgba(119, 89, 194, 0.25);
+}
+
+body.light-theme .cta-btn-primary {
+  color: #ffffff;
+  border-color: var(--orange-dark);
+  box-shadow: 5px 5px 0px 0px var(--orange-light);
+}
+
+body.light-theme .cta-btn-primary:hover {
+  color: #ffffff;
+  box-shadow: 7px 7px 0px 0px var(--orange);
+}
+
+body.light-theme .cta-btn-secondary {
+  border-color: var(--gray-700);
+  box-shadow: 5px 5px 0px 0px var(--gray-700);
+}
+
+body.light-theme .cta-btn-secondary:hover {
+  box-shadow: 7px 7px 0px 0px var(--purple-light);
+}
+
+/* Vote controls in light theme */
+body.light-theme .vote-btn {
+  background: var(--dark);
+  border-color: var(--gray-700);
+  color: var(--gray-400);
+}
+
+body.light-theme .vote-btn:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+body.light-theme .vote-btn.active {
+  background: rgba(252, 109, 38, 0.1);
+  border-color: var(--orange);
+  color: var(--orange);
 }
 
 /* Status Box */

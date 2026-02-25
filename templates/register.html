@@ -1,166 +1,270 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register - Openfeed</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/auth.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-  </head>
-  <body>
-    <div class="auth-page">
-      <div class="auth-card">
-        <div class="auth-header">
-          <div class="auth-logo">✨</div>
-          <h1>join openfeed</h1>
-          <p>Create your account and start sharing feedback</p>
-        </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - OpenFeedback</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='assets/openfeed.ico') }}" type="image/x-icon">
+    <style>
+        html, body {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .auth-page-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+        }
+        .auth-card {
+            background: var(--darker);
+            border: 3px solid var(--orange);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 6px 6px 0px 0px var(--orange-light);
+        }
+        .auth-card-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .auth-card-header h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--orange-light), var(--orange-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        .auth-card-header p {
+            color: var(--gray-400);
+            font-size: 0.95rem;
+        }
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--white);
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: var(--dark);
+            border: 3px solid var(--gray-700);
+            border-radius: 10px;
+            color: var(--white);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--orange);
+            box-shadow: 0 0 0 3px var(--darker), 0 0 12px rgba(252, 109, 38, 0.25);
+        }
+        .form-group input::placeholder {
+            color: var(--gray-400);
+        }
+        .password-requirements {
+            font-size: 0.8rem;
+            color: var(--gray-400);
+            margin-top: 0.5rem;
+            padding-left: 0.25rem;
+        }
+        .password-requirements ul {
+            margin: 0.25rem 0;
+            padding-left: 1.25rem;
+        }
+        .password-requirements li {
+            margin-bottom: 0.15rem;
+        }
+        .btn-submit {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            background: var(--orange);
+            color: var(--white);
+            border: 3px solid var(--white);
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 5px 5px 0px 0px var(--white);
+            font-family: inherit;
+            margin-top: 0.5rem;
+        }
+        .btn-submit:hover {
+            background: var(--orange-light);
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0px 0px var(--white);
+        }
+        .btn-submit:active {
+            transform: translate(0, 0);
+            box-shadow: 3px 3px 0px 0px var(--white);
+        }
+        .auth-links {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--gray-400);
+            font-size: 0.9rem;
+        }
+        .auth-links a {
+            color: var(--orange-light);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        .auth-links a:hover {
+            color: var(--orange);
+            text-decoration: underline;
+        }
+        .auth-links p {
+            margin: 0.5rem 0;
+        }
+        .alert {
+            padding: 0.875rem 1rem;
+            margin-bottom: 1.25rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 2px solid;
+        }
+        .alert-danger {
+            background: rgba(226, 67, 41, 0.15);
+            color: var(--orange-dark);
+            border-color: var(--orange-dark);
+        }
+        .alert-success {
+            background: rgba(45, 186, 78, 0.15);
+            color: var(--green);
+            border-color: var(--green);
+        }
 
-        {% with messages = get_flashed_messages(with_categories=true) %} {% if
-        messages %} {% for category, message in messages %}
-        <div class="flash-message flash-{{ category }}">
-          <i
-            class="fas {% if category == 'success' %}fa-check-circle{% else %}fa-exclamation-circle{% endif %}"
-          ></i>
-          <span>{{ message }}</span>
-          <button type="button" class="flash-close" aria-label="Close message">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-        {% endfor %} {% endif %} {% endwith %}
+        /* Light theme overrides for auth buttons */
+        body.light-theme .btn-submit {
+            color: #ffffff;
+            border-color: var(--orange-dark);
+            box-shadow: 5px 5px 0px 0px var(--orange-light);
+        }
+        body.light-theme .btn-submit:hover {
+            color: #ffffff;
+            box-shadow: 7px 7px 0px 0px var(--orange);
+        }
+        body.light-theme .auth-card {
+            box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .auth-links a {
+            color: var(--orange);
+        }
 
-        <form
-          method="POST"
-          action="{{ url_for('auth.register') }}"
-          id="registerForm"
-        >
-          <div class="form-group">
-            <label for="username">
-              <i class="fas fa-user"></i>
-              Username
-            </label>
-            <div class="input-group">
-              <i class="fas fa-user input-icon"></i>
-              <input
-                type="text"
-                id="username"
-                name="username"
-                placeholder="Choose a unique username"
-                required
-                minlength="3"
-                autocomplete="username"
-              />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="email">
-              <i class="fas fa-envelope"></i>
-              Email Address
-            </label>
-            <div class="input-group">
-              <i class="fas fa-envelope input-icon"></i>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="your.email@example.com"
-                required
-                autocomplete="email"
-              />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="password">
-              <i class="fas fa-lock"></i>
-              Password
-            </label>
-            <div class="input-group password-input-wrapper">
-              <i class="fas fa-lock input-icon"></i>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Create a strong password"
-                required
-                minlength="8"
-                autocomplete="new-password"
-              />
-              <button
-                type="button"
-                class="password-toggle-btn"
-                onclick="togglePasswordVisibility('password')"
-                aria-label="Toggle password visibility"
-              >
-                <i class="fas fa-eye"></i>
-              </button>
-            </div>
-            <div class="password-requirements">
-              <div class="password-requirements-title">
-                <i class="fas fa-shield-alt"></i>
-                Password Requirements:
-              </div>
-              <ul>
-                <li>At least 8 characters long</li>
-                <li>One uppercase letter (A-Z)</li>
-                <li>One lowercase letter (a-z)</li>
-                <li>One number (0-9)</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="confirm_password">
-              <i class="fas fa-lock"></i>
-              Confirm Password
-            </label>
-            <div class="input-group password-input-wrapper">
-              <i class="fas fa-lock input-icon"></i>
-              <input
-                type="password"
-                id="confirm_password"
-                name="confirm_password"
-                placeholder="Re-enter your password"
-                required
-                autocomplete="new-password"
-              />
-              <button
-                type="button"
-                class="password-toggle-btn"
-                onclick="togglePasswordVisibility('confirm_password')"
-                aria-label="Toggle confirm password visibility"
-              >
-                <i class="fas fa-eye"></i>
-              </button>
-            </div>
-          </div>
-
-          <button type="submit" class="auth-submit-btn">
-            <i class="fas fa-user-plus"></i>
-            Create Account
-          </button>
-        </form>
-
-        <div class="auth-links">
-          <p>
-            Already have an account?
-            <a href="{{ url_for('auth.login') }}">Sign in here</a>
-          </p>
-          <p>
-            <a href="{{ url_for('index') }}">
-              <i class="fas fa-arrow-left"></i> Back to Home
+        @media (max-width: 480px) {
+            .auth-page-wrapper {
+                padding: 7rem 1rem 2rem;
+            }
+            .auth-card {
+                padding: 1.75rem;
+            }
+            .auth-card-header h1 {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Navbar -->
+    <nav class="floating-navbar">
+        <div class="navbar-content">
+            <a href="{{ url_for('index') }}" class="navbar-brand" style="text-decoration:none;">
+                <span class="brand-icon"><i class="fas fa-bolt"></i></span>
+                <span class="brand-text">openfeed..</span>
             </a>
-          </p>
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <a href="{{ url_for('index') }}" class="feedback-trigger-btn" style="text-decoration:none;">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <button id="theme-toggle" class="feedback-trigger-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="auth-page-wrapper">
+        <div class="auth-card">
+            <div class="auth-card-header">
+                <h1><i class="fas fa-user-plus"></i> Register</h1>
+                <p>Create your account</p>
+            </div>
+          </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('auth.register') }}">
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="username" name="username" placeholder="Choose a username" required minlength="3">
+                </div>
+
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="password" name="password" placeholder="Create a password" required minlength="8">
+                    <div class="password-requirements">
+                        Password must contain:
+                        <ul>
+                            <li>At least 8 characters</li>
+                            <li>One uppercase letter</li>
+                            <li>One lowercase letter</li>
+                            <li>One number</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password"><i class="fas fa-lock"></i> Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-user-plus"></i>
+                    Register
+                </button>
+            </form>
+
+            <div class="auth-links">
+                <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a></p>
+                <p><a href="{{ url_for('index') }}">Back to Home</a></p>
+            </div>
         </div>
       </div>
     </div>
-    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
-  </body>
+
+    <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
+</body>
 </html>

@@ -9,7 +9,7 @@ feedbackBtn.addEventListener("click", () => {
   // Check if user is authenticated
   const authState = document.getElementById('auth-state');
   const isLoggedIn = authState && authState.dataset.loggedIn === 'true';
-  
+
   if (!isLoggedIn) {
     // Show alert and redirect to login
     if (confirm("Please login to share feedback. Click OK to go to the login page.")) {
@@ -17,7 +17,7 @@ feedbackBtn.addEventListener("click", () => {
     }
     return;
   }
-  
+
   // User is authenticated, open modal
   feedbackOverlay.classList.add("active")
   document.body.style.overflow = "hidden"
@@ -114,23 +114,4 @@ document.addEventListener("keydown", (e) => {
 
 console.log("[v0] Openfeed UI initialized successfully")
 
-document.addEventListener("DOMContentLoaded", function () {
-  const toggleBtn = document.getElementById("theme-toggle");
-
-  // Load saved theme
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "light") {
-    document.body.classList.add("light-theme");
-  }
-
-  toggleBtn.addEventListener("click", function () {
-    document.body.classList.toggle("light-theme");
-
-    // Save preference
-    if (document.body.classList.contains("light-theme")) {
-      localStorage.setItem("theme", "light");
-    } else {
-      localStorage.setItem("theme", "dark");
-    }
-  });
-});
+// Theme toggle logic has been moved to theme-toggle.js
