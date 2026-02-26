@@ -1,147 +1,270 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Feedback Platform</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Register - OpenFeedback</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='assets/openfeed.ico') }}" type="image/x-icon">
     <style>
-        .auth-container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 30px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        html, body {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
-        .auth-header {
+        .auth-page-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+        }
+        .auth-card {
+            background: var(--darker);
+            border: 3px solid var(--orange);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 6px 6px 0px 0px var(--orange-light);
+        }
+        .auth-card-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
+        }
+        .auth-card-header h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--orange-light), var(--orange-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        .auth-card-header p {
+            color: var(--gray-400);
+            font-size: 0.95rem;
         }
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.25rem;
         }
         .form-group label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #333;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--white);
         }
         .form-group input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
+            padding: 0.875rem 1rem;
+            background: var(--dark);
+            border: 3px solid var(--gray-700);
+            border-radius: 10px;
+            color: var(--white);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
             box-sizing: border-box;
         }
         .form-group input:focus {
             outline: none;
-            border-color: #4CAF50;
+            border-color: var(--orange);
+            box-shadow: 0 0 0 3px var(--darker), 0 0 12px rgba(252, 109, 38, 0.25);
         }
-        .btn-primary {
+        .form-group input::placeholder {
+            color: var(--gray-400);
+        }
+        .password-requirements {
+            font-size: 0.8rem;
+            color: var(--gray-400);
+            margin-top: 0.5rem;
+            padding-left: 0.25rem;
+        }
+        .password-requirements ul {
+            margin: 0.25rem 0;
+            padding-left: 1.25rem;
+        }
+        .password-requirements li {
+            margin-bottom: 0.15rem;
+        }
+        .btn-submit {
             width: 100%;
-            padding: 12px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            background: var(--orange);
+            color: var(--white);
+            border: 3px solid var(--white);
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1rem;
             cursor: pointer;
-            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 5px 5px 0px 0px var(--white);
+            font-family: inherit;
+            margin-top: 0.5rem;
         }
-        .btn-primary:hover {
-            background: #45a049;
+        .btn-submit:hover {
+            background: var(--orange-light);
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0px 0px var(--white);
+        }
+        .btn-submit:active {
+            transform: translate(0, 0);
+            box-shadow: 3px 3px 0px 0px var(--white);
         }
         .auth-links {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 1.5rem;
+            color: var(--gray-400);
+            font-size: 0.9rem;
         }
         .auth-links a {
-            color: #4CAF50;
+            color: var(--orange-light);
             text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
         }
         .auth-links a:hover {
+            color: var(--orange);
             text-decoration: underline;
         }
+        .auth-links p {
+            margin: 0.5rem 0;
+        }
         .alert {
-            padding: 12px;
-            margin-bottom: 20px;
-            border-radius: 5px;
+            padding: 0.875rem 1rem;
+            margin-bottom: 1.25rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 2px solid;
         }
         .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: rgba(226, 67, 41, 0.15);
+            color: var(--orange-dark);
+            border-color: var(--orange-dark);
         }
         .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: rgba(45, 186, 78, 0.15);
+            color: var(--green);
+            border-color: var(--green);
         }
-        .password-requirements {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
+
+        /* Light theme overrides for auth buttons */
+        body.light-theme .btn-submit {
+            color: #ffffff;
+            border-color: var(--orange-dark);
+            box-shadow: 5px 5px 0px 0px var(--orange-light);
         }
-        .password-requirements ul {
-            margin: 5px 0;
-            padding-left: 20px;
+        body.light-theme .btn-submit:hover {
+            color: #ffffff;
+            box-shadow: 7px 7px 0px 0px var(--orange);
+        }
+        body.light-theme .auth-card {
+            box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .auth-links a {
+            color: var(--orange);
+        }
+
+        @media (max-width: 480px) {
+            .auth-page-wrapper {
+                padding: 7rem 1rem 2rem;
+            }
+            .auth-card {
+                padding: 1.75rem;
+            }
+            .auth-card-header h1 {
+                font-size: 1.75rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-header">
-            <h1>Register</h1>
-            <p>Create your account</p>
+    <!-- Floating Navbar -->
+    <nav class="floating-navbar">
+        <div class="navbar-content">
+            <a href="{{ url_for('index') }}" class="navbar-brand" style="text-decoration:none;">
+                <span class="brand-icon"><i class="fas fa-bolt"></i></span>
+                <span class="brand-text">openfeed..</span>
+            </a>
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <a href="{{ url_for('index') }}" class="feedback-trigger-btn" style="text-decoration:none;">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <button id="theme-toggle" class="feedback-trigger-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
         </div>
+    </nav>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-
-        <form method="POST" action="{{ url_for('auth.register') }}">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required minlength="3">
+    <div class="auth-page-wrapper">
+        <div class="auth-card">
+            <div class="auth-card-header">
+                <h1><i class="fas fa-user-plus"></i> Register</h1>
+                <p>Create your account</p>
             </div>
+          </div>
 
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required minlength="8">
-                <div class="password-requirements">
-                    Password must contain:
-                    <ul>
-                        <li>At least 8 characters</li>
-                        <li>One uppercase letter</li>
-                        <li>One lowercase letter</li>
-                        <li>One number</li>
-                    </ul>
+            <form method="POST" action="{{ url_for('auth.register') }}">
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="username" name="username" placeholder="Choose a username" required minlength="3">
                 </div>
+
+                <div class="form-group">
+                    <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="password" name="password" placeholder="Create a password" required minlength="8">
+                    <div class="password-requirements">
+                        Password must contain:
+                        <ul>
+                            <li>At least 8 characters</li>
+                            <li>One uppercase letter</li>
+                            <li>One lowercase letter</li>
+                            <li>One number</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password"><i class="fas fa-lock"></i> Confirm Password</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-user-plus"></i>
+                    Register
+                </button>
+            </form>
+
+            <div class="auth-links">
+                <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a></p>
+                <p><a href="{{ url_for('index') }}">Back to Home</a></p>
             </div>
-
-            <div class="form-group">
-                <label for="confirm_password">Confirm Password</label>
-                <input type="password" id="confirm_password" name="confirm_password" required>
-            </div>
-
-            <button type="submit" class="btn-primary">Register</button>
-        </form>
-
-        <div class="auth-links">
-            <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a></p>
-            <p><a href="{{ url_for('index') }}">Back to Home</a></p>
         </div>
+      </div>
     </div>
+
+    <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
 </body>
 </html>

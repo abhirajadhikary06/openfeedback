@@ -3,147 +3,225 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile - Feedback Platform</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Profile - OpenFeedback</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='assets/openfeed.ico') }}" type="image/x-icon">
     <style>
-        .profile-container {
-            max-width: 900px;
-            margin: 30px auto;
-            padding: 20px;
+        html, body {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
-        .profile-header {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+        .profile-page-wrapper {
+            flex: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+            width: 100%;
+        }
+        .profile-card {
+            background: var(--darker);
+            border: 3px solid var(--orange);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: 6px 6px 0px 0px var(--orange-light);
+            margin-bottom: 2rem;
         }
         .profile-info {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 1.5rem;
         }
         .profile-avatar {
-            width: 80px;
-            height: 80px;
-            background: #4CAF50;
+            width: 70px;
+            height: 70px;
+            min-width: 70px;
+            background: var(--orange);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 32px;
-            font-weight: bold;
+            color: #ffffff;
+            font-size: 1.75rem;
+            font-weight: 800;
+            border: 3px solid var(--orange-light);
         }
         .profile-details h1 {
-            margin: 0 0 10px 0;
-            color: #333;
+            margin: 0 0 0.5rem 0;
+            font-size: 1.75rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--orange-light), var(--orange-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         .profile-details p {
-            margin: 5px 0;
-            color: #666;
+            margin: 0.25rem 0;
+            color: var(--gray-400);
+            font-size: 0.9rem;
         }
-        .nav-bar {
-            background: white;
-            padding: 15px 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+        .profile-details p strong {
+            color: var(--gray-300);
+        }
+        .feedback-section-card {
+            background: var(--darker);
+            border: 3px solid var(--purple);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: 6px 6px 0px 0px var(--purple-light);
+        }
+        .feedback-section-card h2 {
+            margin: 0 0 1.5rem 0;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--white);
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 0.5rem;
         }
-        .nav-bar a {
-            color: #4CAF50;
-            text-decoration: none;
-            margin-right: 15px;
-        }
-        .nav-bar a:hover {
-            text-decoration: underline;
-        }
-        .feedback-section {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .feedback-section h2 {
-            margin-top: 0;
-            color: #333;
+        .feedback-section-card h2 i {
+            color: var(--purple-light);
         }
         .feedback-item {
-            border: 1px solid #e0e0e0;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            transition: box-shadow 0.3s;
+            background: var(--dark);
+            border: 2px solid var(--gray-700);
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
         }
         .feedback-item:hover {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-color: var(--orange);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(252, 109, 38, 0.15);
         }
         .feedback-item h3 {
-            margin: 0 0 10px 0;
-            color: #333;
+            margin: 0 0 0.5rem 0;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1rem;
         }
         .feedback-item p {
-            color: #666;
-            margin: 5px 0;
+            color: var(--gray-400);
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
         }
         .feedback-meta {
             display: flex;
-            gap: 15px;
-            margin-top: 10px;
-            font-size: 14px;
+            gap: 1rem;
+            margin-top: 0.75rem;
+            font-size: 0.8rem;
+            flex-wrap: wrap;
+            align-items: center;
+            color: var(--gray-400);
         }
         .status-badge {
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            border: 2px solid;
         }
         .status-pending {
-            background: #fff3cd;
-            color: #856404;
+            background: rgba(252, 163, 38, 0.15);
+            color: var(--orange-light);
+            border-color: var(--orange-light);
         }
         .status-approved {
-            background: #d4edda;
-            color: #155724;
+            background: rgba(45, 186, 78, 0.15);
+            color: var(--green);
+            border-color: var(--green);
         }
         .status-rejected {
-            background: #f8d7da;
-            color: #721c24;
+            background: rgba(226, 67, 41, 0.15);
+            color: var(--orange-dark);
+            border-color: var(--orange-dark);
         }
         .no-feedback {
             text-align: center;
-            padding: 40px;
-            color: #999;
+            padding: 2.5rem 1rem;
+            color: var(--gray-400);
         }
-        .btn-logout {
-            background: #f44336;
-            color: white;
-            padding: 8px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+        .no-feedback i {
+            font-size: 2.5rem;
+            color: var(--gray-700);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+        .no-feedback a {
+            color: var(--orange-light);
             text-decoration: none;
-            display: inline-block;
+            font-weight: 600;
         }
-        .btn-logout:hover {
-            background: #da190b;
+        .no-feedback a:hover {
+            color: var(--orange);
+            text-decoration: underline;
+        }
+
+        /* Light theme overrides */
+        body.light-theme .profile-card {
+            box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .feedback-section-card {
+            box-shadow: 4px 4px 0px 0px rgba(119, 89, 194, 0.2);
+        }
+        body.light-theme .feedback-item {
+            background: var(--dark);
+        }
+        body.light-theme .feedback-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        body.light-theme .logout-btn {
+            color: #ffffff;
+        }
+
+        @media (max-width: 480px) {
+            .profile-page-wrapper {
+                padding: 7rem 1rem 2rem;
+            }
+            .profile-info {
+                flex-direction: column;
+                text-align: center;
+            }
+            .profile-details h1 {
+                font-size: 1.5rem;
+            }
+            .feedback-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="profile-container">
-        <div class="nav-bar">
-            <div>
-                <a href="{{ url_for('index') }}">Home</a>
-                <a href="{{ url_for('auth.profile') }}">My Profile</a>
+    <!-- Floating Navbar -->
+    <nav class="floating-navbar">
+        <div class="navbar-content">
+            <a href="{{ url_for('index') }}" class="navbar-brand" style="text-decoration:none;">
+                <span class="brand-icon"><i class="fas fa-bolt"></i></span>
+                <span class="brand-text">openfeed..</span>
+            </a>
+            <div style="display:flex;align-items:center;gap:0.75rem;">
+                <a href="{{ url_for('index') }}" class="feedback-trigger-btn" style="text-decoration:none;">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <button onclick="confirmLogout()" class="logout-btn" style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem 1.25rem;background:var(--orange-dark);color:#ffffff;border:2px solid var(--orange);border-radius:10px;font-weight:600;font-size:0.9rem;cursor:pointer;transition:all 0.3s ease;font-family:inherit;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+                <button id="theme-toggle" class="feedback-trigger-btn">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
-            <a href="{{ url_for('auth.logout') }}" class="btn-logout">Logout</a>
         </div>
+    </nav>
 
-        <div class="profile-header">
+    <div class="profile-page-wrapper">
+        <div class="profile-card">
             <div class="profile-info">
                 <div class="profile-avatar">
                     {{ user.username[0].upper() }}
@@ -156,9 +234,9 @@
             </div>
         </div>
 
-        <div class="feedback-section">
-            <h2>My Feedback Submissions</h2>
-            
+        <div class="feedback-section-card">
+            <h2><i class="fas fa-comments"></i> My Feedback Submissions</h2>
+
             {% if feedback_list %}
                 {% for feedback in feedback_list %}
                     <div class="feedback-item">
@@ -177,11 +255,21 @@
                 {% endfor %}
             {% else %}
                 <div class="no-feedback">
+                    <i class="fas fa-inbox"></i>
                     <p>You haven't submitted any feedback yet.</p>
-                    <a href="{{ url_for('index') }}" style="color: #4CAF50;">Submit your first feedback</a>
+                    <a href="{{ url_for('index') }}">Submit your first feedback</a>
                 </div>
             {% endif %}
         </div>
     </div>
+
+    <script>
+        function confirmLogout() {
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = "{{ url_for('auth.logout') }}";
+            }
+        }
+    </script>
+    <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
 </body>
 </html>
