@@ -216,7 +216,24 @@
 
                 <div class="form-group">
                     <label for="password"><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+                    <div style="position: relative;">
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+                        <i 
+                            id="toggleIcon"
+                            class="fas fa-eye"
+                            onclick="togglePassword()"
+                            style="
+                                position: absolute;
+                                right: 12px;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                cursor: pointer;
+                                color: #666;
+                            "
+                        ></i>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn-submit">
@@ -234,5 +251,22 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
+    
+    <script>
+    function togglePassword() {
+        const passwordField = document.getElementById("password");
+        const icon = document.getElementById("toggleIcon");
+
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            passwordField.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+    </script>
 </body>
 </html>
